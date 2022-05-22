@@ -1,4 +1,4 @@
-package types;
+package types.game;
 
 import types.exceptions.NotEnoughPlayersException;
 

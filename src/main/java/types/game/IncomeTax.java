@@ -1,9 +1,7 @@
-package types;
+package types.game;
 
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
-
-import java.security.SecureRandom;
 
 @JsonTypeName("IncomeTax")
 public class IncomeTax implements Tile {

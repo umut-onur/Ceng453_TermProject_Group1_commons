@@ -1,4 +1,4 @@
-package types;
+package types.game;
 
 public interface Buyable extends Tile {
     String getName();

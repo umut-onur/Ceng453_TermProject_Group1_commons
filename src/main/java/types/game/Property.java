@@ -1,19 +1,19 @@
-package types;
+package types.game;
 
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-@JsonTypeName("PublicTransport")
-public class PublicTransport implements Buyable {
+@JsonTypeName("Property")
+public class Property implements Buyable {
     private String gameId;
     private String name;
     private int firstCost;
     private Player owner;
     private int position;
 
-    public PublicTransport() {}
+    public Property() {}
 
-    public PublicTransport(String gameId, String name, int firstCost, int position) {
+    public Property(String gameId, String name, int firstCost, int position) {
         this.gameId = gameId;
         this.name = name;
         this.firstCost = firstCost;
@@ -21,7 +21,7 @@ public class PublicTransport implements Buyable {
         this.position = position;
     }
 
-    public PublicTransport(String gameId, String name, int firstCost) {
+    public Property(String gameId, String name, int firstCost) {
         this.gameId = gameId;
         this.name = name;
         this.firstCost = firstCost;
@@ -46,7 +46,7 @@ public class PublicTransport implements Buyable {
 
     @Override
     public int getRentForPlayer(Player player) {
-        return (firstCost / 10) * player.getPublicTransportsOwned();
+        return firstCost / 10;
     }
 
     @Override

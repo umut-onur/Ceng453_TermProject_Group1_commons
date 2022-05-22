@@ -1,22 +1,20 @@
-package types;
+package types.game;
 
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
-@JsonTypeName("StartingPoint")
-public class StartingPoint implements Tile {
+@JsonTypeName("JustVisiting")
+public class JustVisiting implements Tile {
     private String gameId;
     private String name;
     private int position;
-    private int passingReward;
 
-    public StartingPoint() {}
+    public JustVisiting() {}
 
-    public StartingPoint(String gameId) {
+    public JustVisiting(String gameId) {
         this.gameId = gameId;
-        this.name = "Starting Point";
-        this.position = 0;
-        this.passingReward = 100;
+        this.name = "Jail/Just Visiting";
+        this.position = 12;
     }
 
     @Override
@@ -32,10 +30,6 @@ public class StartingPoint implements Tile {
     @Override
     public int getPosition() {
         return position;
-    }
-
-    public int getPassingReward() {
-        return passingReward;
     }
 
     @Override
