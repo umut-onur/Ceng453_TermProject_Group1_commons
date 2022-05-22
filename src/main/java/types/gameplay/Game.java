@@ -184,7 +184,6 @@ public class Game implements GameService {
         this.currentPlayer = this.players.get(this.players.size() - 1);
         this.phase = GamePhase.roll;
         this.startedAt = System.currentTimeMillis() / 1000L;
-        GameMaster.getInstance().addActiveGame(this);
         this.passTurnToNextPlayer();
     }
 
@@ -220,7 +219,6 @@ public class Game implements GameService {
 
     public void finish() {
         this.finishedAt = System.currentTimeMillis() / 1000L;
-        GameMaster.getInstance().removeActiveGame(this);
     }
 
     @Override
