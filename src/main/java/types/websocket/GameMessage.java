@@ -1,6 +1,7 @@
 package types.websocket;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import org.springframework.lang.NonNull;
 import types.usercommands.UserCommand;
@@ -12,6 +13,8 @@ import types.usercommands.UserCommand;
 public class GameMessage {
     private HelloMessage helloMessage;  // the hello message that client sends after joining a game
     private UserCommand userCommand;    // the user-command message that client sends after making a move in the game
+
+    public GameMessage() {}
 
     /**
      * Initializes the GameMessage with a HelloMessage.
