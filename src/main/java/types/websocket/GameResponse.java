@@ -12,20 +12,29 @@ public class GameResponse {
     private Game game;                      // the updated game state that server sends to the client
     private HelloResponse helloResponse;    // the response of the hello protocol at the beginning of a websocket communication
 
+    private Error error;                    // the error message if user command was not successful
+
     public GameResponse() {}
 
     /**
-     * Initializes the GameResponse with a Game.
+     * Initializes the GameResponse with a <code>Game</code>.
      */
     public GameResponse(Game game) {
         this.game = game;
     }
 
     /**
-     * Initializes the GameResponse with a HelloResponse.
+     * Initializes the GameResponse with a <code>HelloResponse</code>.
      */
     public GameResponse(HelloResponse helloResponse) {
         this.helloResponse = helloResponse;
+    }
+
+    /**
+     * Initializes the GameResponse with an <code>Error</code>.
+     */
+    public GameResponse(Error error) {
+        this.error = error;
     }
 
     @JsonGetter
@@ -38,6 +47,11 @@ public class GameResponse {
         return helloResponse;
     }
 
+    @JsonGetter
+    public Error getError() {
+        return error;
+    }
+
     @JsonSetter
     public void setGame(Game game) {
         this.game = game;
@@ -48,16 +62,24 @@ public class GameResponse {
         this.helloResponse = helloResponse;
     }
 
+    @JsonSetter
+    public void setError(Error error) {
+        this.error = error;
+    }
+
     /**
      * @return The type of this message based on its internal fields.
      */
     public GameMessageType getMessageType() {
-        if (this.game == null && this.helloResponse == null) {
-            return GameMessageType.Invalid;
-        }
-        if (this.game != null) {
+        if (this.game != null && this.helloResponse == null && this.error == null) {
             return GameMessageType.GameState;
         }
-        return GameMessageType.Hello;
+        if (this.game == null && this.helloResponse != null && this.error == null) {
+            return GameMessageType.Hello;
+        }
+        if (this.game == null && this.helloResponse == null && this.error != null) {
+            return GameMessageType.Error;
+        }
+        return GameMessageType.Invalid;
     }
 }

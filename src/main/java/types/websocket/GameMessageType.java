@@ -7,5 +7,6 @@ public enum GameMessageType {
     Invalid,
     Hello,
     GameState,
-    UserCommand
+    UserCommand,
+    Error
 }
