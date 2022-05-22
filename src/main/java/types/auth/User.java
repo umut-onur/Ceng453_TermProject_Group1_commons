@@ -1,4 +1,4 @@
-package types.game;
+package types.auth;
 
 
 import com.fasterxml.jackson.annotation.*;

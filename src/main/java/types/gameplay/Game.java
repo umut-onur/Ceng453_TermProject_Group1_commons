@@ -1,8 +1,9 @@
-package types.game;
+package types.gameplay;
 
 
 
-import types.exceptions.NotEnoughPlayersException;
+import types.gameplay.exceptions.NotEnoughPlayersException;
+import types.gameplay.exceptions.TileNotFoundException;
 
 import java.util.*;
 
@@ -10,11 +11,21 @@ public class Game implements GameService {
     private String id;
     private List<Player> players;
     private Player currentPlayer;
+    private GamePhase phase;
+    private Dice dice;
     private List<Tile> board;
     private Long startedAt;
     private Long finishedAt;
 
     public Game() {
+        this.id = null;
+        this.players = new ArrayList<Player>();
+        this.board = new ArrayList<Tile>();
+        this.currentPlayer = null;
+        this.phase = null;
+        this.dice = new Dice(this);
+        this.startedAt = null;
+        this.finishedAt = null;
     }
 
     public Game(String gameId, List<Player> players) {
@@ -22,6 +33,8 @@ public class Game implements GameService {
         this.players = players;
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
+        this.phase = null;
+        this.dice = new Dice(this);
         this.startedAt = null;
         this.finishedAt = null;
     }
@@ -31,6 +44,8 @@ public class Game implements GameService {
         this.players = new ArrayList<Player>();
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
+        this.phase = null;
+        this.dice = new Dice(this);
         this.startedAt = null;
         this.finishedAt = null;
     }
@@ -40,6 +55,8 @@ public class Game implements GameService {
         this.players = new ArrayList<Player>();
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
+        this.phase = null;
+        this.dice = new Dice(this);
         this.startedAt = startedAt;
         this.finishedAt = finishedAt;
     }
@@ -48,8 +65,11 @@ public class Game implements GameService {
     public String getId() {
         return id;
     }
-
-
+    
+    public void setId(String id) {
+        this.id = id;
+    }
+    
     @Override
     public List<Player> getPlayers() {
         return players;
@@ -68,7 +88,20 @@ public class Game implements GameService {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
-
+    
+    public GamePhase getPhase() {
+        return phase;
+    }
+    
+    public void setPhase(GamePhase phase) {
+        this.phase = phase;
+    }
+    
+    @Override
+    public Dice getDice() {
+        return dice;
+    }
+    
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
@@ -109,48 +142,36 @@ public class Game implements GameService {
     public void removePlayer(Player player) {
         this.players.remove(player);
     }
-
-    private void initializeBoard() {
-        // TODO: Modify this so that the random distribution becomes normal.
-        List<Property> properties = new ArrayList<Property>();
-        List<PublicTransport> publicTransports = new ArrayList<PublicTransport>();
-        List<IncomeTax> incomeTaxes = new ArrayList<IncomeTax>();
-
-        for (int i = 0; i < 8; i++) {
-            properties.add(new Property(this.id, String.format("Property-%d", i), 100 + 50 * i));
-        }
-        for (int i = 0; i < 4; i++) {
-            publicTransports.add(new PublicTransport(this.id, String.format("Transport-%d", i), 250));
-        }
-        incomeTaxes.add(new IncomeTax(this.id));
-
-        while (!(properties.isEmpty() && publicTransports.isEmpty() && incomeTaxes.isEmpty())) {
-            Random rand = new Random();
-            int randInt = rand.nextInt(3);
-            switch (randInt) {
-                case 0:
-                    if (!properties.isEmpty()) {
-                        board.add(properties.remove(0));
-                    }
-                    break;
-                case 1:
-                    if (!publicTransports.isEmpty()) {
-                        board.add(publicTransports.remove(0));
-                    }
-                    break;
-                case 2:
-                    if (!incomeTaxes.isEmpty()) {
-                        board.add(incomeTaxes.remove(0));
-                    }
-                    break;
-                default:
-                    break;
+    
+    public Player playerOfUser(String userId) {
+        for (Player p : this.players) {
+            if (p.getUserId().equals(userId)) {
+                return p;
             }
         }
+        return null;
+    }
 
-        board.add(0, new StartingPoint(this.id));
-        board.add(4, new GoToJail(this.id));
-        board.add(12, new JustVisiting(this.id));
+    private void initializeBoard() {
+        List<Property> properties = new ArrayList<Property>();
+        List<PublicTransport> publicTransports = new ArrayList<PublicTransport>();
+        Random rand = new Random();
+
+        for (int i = 0; i < 8; i++) {
+            properties.add(new Property(this, String.format("Property-%d", i), 100 + 50 * i));
+        }
+        for (int i = 0; i < 4; i++) {
+            publicTransports.add(new PublicTransport(this, String.format("Transport-%d", i), 250));
+        }
+        
+        board.addAll(properties);
+        for (int i=0; i<4; i++) {
+            board.add(rand.nextInt(board.size()), publicTransports.get(i));
+        }
+        board.add(rand.nextInt(board.size()), new IncomeTax(this));
+        board.add(0, new StartingPoint(this));
+        board.add(4, new GoToJail(this));
+        board.add(12, new JustVisiting(this));
 
         for (int i = 0; i < board.size(); i++) {
             board.get(i).setPosition(i);
@@ -158,25 +179,34 @@ public class Game implements GameService {
     }
 
     @Override
-    public void start() throws NotEnoughPlayersException {
+    public void start() {
         this.initializeBoard();
         this.currentPlayer = this.players.get(this.players.size() - 1);
+        this.phase = GamePhase.roll;
         this.startedAt = System.currentTimeMillis() / 1000L;
-        this.passTurnToNextPlayer(false);
+        GameMaster.getInstance().addActiveGame(this);
+        this.passTurnToNextPlayer();
     }
 
-    void passTurnToNextPlayer(boolean currentPlayerWillRepeat) {
+    void passTurnToNextPlayer() {
         if (this.shouldEnd()) {
             this.finish();
         } else {
-            if (!currentPlayerWillRepeat) {
-                this.currentPlayer = this.currentPlayer == this.players.get(this.players.size() - 1)
+            if (!currentPlayer.willRepeatTurn()) {
+                this.currentPlayer = (this.currentPlayer == this.players.get(this.players.size() - 1))
                         ? this.players.get(0)
                         : this.players.get(this.players.indexOf(this.currentPlayer) + 1);
             }
-            this.currentPlayer.takeTurn();
         }
-
+    }
+    
+    public int findIncomeTax() throws TileNotFoundException {
+        for (Tile t : this.board) {
+            if (t.getName().contains("Income Tax")) {
+                return t.getPosition();
+            }
+        }
+        throw new TileNotFoundException("Income Tax");
     }
 
     private boolean shouldEnd() {
@@ -190,6 +220,7 @@ public class Game implements GameService {
 
     public void finish() {
         this.finishedAt = System.currentTimeMillis() / 1000L;
+        GameMaster.getInstance().removeActiveGame(this);
     }
 
     @Override
@@ -230,4 +261,3 @@ public class Game implements GameService {
                 this.id, this.startedAt, this.finishedAt, this.currentPlayer, this.players, this.board);
     }
 }
-

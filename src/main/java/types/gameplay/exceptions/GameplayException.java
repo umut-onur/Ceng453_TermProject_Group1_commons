@@ -1,4 +1,4 @@
-package types.exceptions;
+package types.gameplay.exceptions;
 
 public class GameplayException extends Exception{
     public GameplayException(String message) {

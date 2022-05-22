@@ -1,6 +1,5 @@
-package types.game;
+package types.gameplay;
 
 public interface GameEntity {
     String getGameId();
 }
-

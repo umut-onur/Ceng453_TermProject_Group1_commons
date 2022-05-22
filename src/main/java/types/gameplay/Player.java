@@ -1,14 +1,15 @@
-package types.game;
+package types.gameplay;
 
-
-import types.exceptions.NotEnoughMoneyToBuyException;
+import types.auth.User;
+import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
+import types.gameplay.exceptions.TileNotBuyableException;
+import types.gameplay.exceptions.TileNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Player implements GameEntity {
-    private String gameId;
+    private Game game;
     private String userId;
     private String name;
     private int balance;
@@ -17,12 +18,23 @@ public class Player implements GameEntity {
     private int turnsInJailLeft;
     private int publicTransportsOwned;
     private int position;
-
+    private Dice mostRecentDice;
+    
     public Player() {
+        this.game = null;
+        this.userId = null;
+        this.name = null;
+        this.balance = 1500;
+        this.buyables = new ArrayList<>();
+        this.doubleRollStreak = 0;
+        this.turnsInJailLeft = 0;
+        this.publicTransportsOwned = 0;
+        this.position = 0;
+        this.mostRecentDice = null;
     }
 
-    public Player(String gameId, String userId, String name) {
-        this.gameId = gameId;
+    public Player(Game game, String userId, String name) {
+        this.game = game;
         this.userId = userId;
         this.name = name;
         this.balance = 1500;
@@ -31,10 +43,11 @@ public class Player implements GameEntity {
         this.turnsInJailLeft = 0;
         this.publicTransportsOwned = 0;
         this.position = 0;
+        this.mostRecentDice = this.game.getDice();
     }
 
-    public Player(String gameId, String name) {
-        this.gameId = gameId;
+    public Player(Game game, String name) {
+        this.game = game;
         this.userId = null;
         this.name = name;
         this.balance = 1500;
@@ -43,10 +56,11 @@ public class Player implements GameEntity {
         this.turnsInJailLeft = 0;
         this.publicTransportsOwned = 0;
         this.position = 0;
+        this.mostRecentDice = this.game.getDice();
     }
 
-    public Player(String gameId, User user) {
-        this.gameId = gameId;
+    public Player(Game game, User user) {
+        this.game = game;
         this.userId = user.getId();
         this.name = user.getUsername();
         this.balance = 1500;
@@ -55,10 +69,11 @@ public class Player implements GameEntity {
         this.turnsInJailLeft = 0;
         this.publicTransportsOwned = 0;
         this.position = 0;
+        this.mostRecentDice = this.game.getDice();
     }
 
-    public Player(String gameId, User user, String name) {
-        this.gameId = gameId;
+    public Player(Game game, User user, String name) {
+        this.game = game;
         this.userId = user.getId();
         this.name = name;
         this.balance = 1500;
@@ -67,11 +82,12 @@ public class Player implements GameEntity {
         this.turnsInJailLeft = 0;
         this.publicTransportsOwned = 0;
         this.position = 0;
+        this.mostRecentDice = this.game.getDice();
     }
 
     @Override
     public String getGameId() {
-        return gameId;
+        return game.getId();
     }
 
     public String getUserId() {
@@ -145,38 +161,90 @@ public class Player implements GameEntity {
     public void decrementPublicTransportsOwned() {
         this.publicTransportsOwned -= 1;
     }
-
-    public void rollDiceAndAdvancePawn() {
-        Random rand = new Random();
-        int firstNumberRolled = rand.nextInt(6) + 1;
-        int secondNumberRolled = rand.nextInt(6) + 1;
-        if (firstNumberRolled == secondNumberRolled) {
-            this.incrementDoubleRollStreak();
+    
+    public Dice getMostRecentDice() {
+        return mostRecentDice;
+    }
+    
+    public boolean willRepeatTurn() {
+        return this.mostRecentDice.isDoubleDice();
+    }
+    
+    public void rollDice() {
+        this.game.getDice().roll();
+        this.mostRecentDice = this.game.getDice();
+    }
+    public void handleDice() {
+        if (this.getMostRecentDice().isDoubleDice()) {
+            this.doubleRollStreak++;
             if (this.doubleRollStreak == 3) {
-                this.resetDoubleRollStreak();
+                this.doubleRollStreak = 0;
                 this.sendToJail();
+            } else {
+                advancePawn(this.getMostRecentDice().getTotal());
             }
         } else {
-            this.resetDoubleRollStreak();
-            this.position += firstNumberRolled + secondNumberRolled;
+            this.doubleRollStreak = 0;
+            advancePawn(this.getMostRecentDice().getTotal());
+        }
+    }
+    private void advancePawn(int steps) {
+        for (int i=0; i<steps; i++) {
+            this.position++;
+            this.passByTile(this.game.getBoard().get(this.position));
+        }
+        this.stepOnTile(this.game.getBoard().get(this.position));
+        this.game.setPhase(GamePhase.trade);
+    }
+    
+    public void buy() throws NotEnoughMoneyToBuyException, TileNotBuyableException {
+        Tile tile = this.game.getBoard().get(this.position);
+        try {
+            Buyable buyable = (Buyable) tile;
+            this.buyBuyable(buyable);
+        } catch (ClassCastException e) {
+            throw new TileNotBuyableException(tile.getName());
         }
     }
 
-    public void buyBuyable(Buyable buyable) throws NotEnoughMoneyToBuyException {
+    private void buyBuyable(Buyable buyable) throws NotEnoughMoneyToBuyException {
         if (this.balance < buyable.getFirstCost()) {
             throw new NotEnoughMoneyToBuyException(this, buyable);
         }
         this.balance -= buyable.getFirstCost();
+        buyable.handlePlayerBuy(this);
         this.buyables.add(buyable);
-        buyable.setOwner(this);
+    }
+    
+    public void passByTile(Tile tile) {
+        tile.handlePlayerPassBy(this);
+    }
+    
+    public void stepOnTile(Tile tile) {
+        tile.handlePlayerStepOn(this);
+    }
+    
+    public void pay(int amount) {
+        this.balance -= amount;
+    }
+    
+    public void pay(int amount, Player player) {
+        this.balance -= amount;
+        player.balance += amount;
+    }
+    
+    public void earn(int amount) {
+        this.balance += amount;
     }
 
-    public void cheatToGetBankrupt() {
-        // TODO
+    public void cheatToGetBankrupt() throws TileNotFoundException {
+        this.position = this.game.findIncomeTax();
+        this.pay(10_000_000);
     }
-
-    public void takeTurn() {
-        // TODO
+    
+    public void endTurn() {
+        this.game.passTurnToNextPlayer();
+        this.game.setPhase(GamePhase.roll);
     }
 
     public boolean equals(Object obj) {
@@ -184,7 +252,7 @@ public class Player implements GameEntity {
             return this.balance == p.balance &&
                     (this.buyables == null ? p.buyables == null : this.buyables.equals(p.buyables)) &&
                     this.doubleRollStreak == p.doubleRollStreak &&
-                    this.gameId.equals(p.gameId) &&
+                    this.getGameId().equals(p.getGameId()) &&
                     this.name.equals(p.name) &&
                     this.position == p.position &&
                     this.publicTransportsOwned == p.publicTransportsOwned &&
@@ -195,7 +263,7 @@ public class Player implements GameEntity {
 
     public String toString() {
         return String.format("Player: gameId=%s, userId=%s, name=%s, position=%d, balance=%d, doubleRollStreak=%d, turnsInJailLeft=%d, publicTransportsOwned=%d, buyables=%s",
-                this.gameId, this.userId, this.name, this.position, this.balance, this.doubleRollStreak,
+                this.getGameId(), this.userId, this.name, this.position, this.balance, this.doubleRollStreak,
                 this.turnsInJailLeft, this.publicTransportsOwned, this.buyables);
     }
 

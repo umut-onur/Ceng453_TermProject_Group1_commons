@@ -1,7 +1,7 @@
-package types.exceptions;
+package types.gameplay.exceptions;
 
-import types.game.Buyable;
-import types.game.Player;
+import types.gameplay.Buyable;
+import types.gameplay.Player;
 
 public class NotEnoughMoneyToBuyException extends GameplayException {
     public NotEnoughMoneyToBuyException(Player player, Buyable buyable) {
