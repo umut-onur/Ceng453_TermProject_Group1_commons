@@ -11,6 +11,8 @@ public class HelloResponse {
     private boolean ok;     // indicates whether hello message was successful or not
     private String error;   // when hello message was not successful, this error contains explanation of why
 
+    public HelloResponse() {}
+
     public HelloResponse(boolean ok, @NonNull String error) {
         this.ok = ok;
         this.error = error;

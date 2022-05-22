@@ -12,6 +12,8 @@ public class HelloMessage {
     private String userId;
     private String gameId;
 
+    public HelloMessage() {}
+
     public HelloMessage(@NonNull String userId, @NonNull String gameId) {
         this.userId = userId;
         this.gameId = gameId;
