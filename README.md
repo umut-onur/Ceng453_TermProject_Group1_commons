@@ -15,4 +15,3 @@ and click `Get it` button, which will
 2. show the maven dependency for it
 
 After build is complete, we can just copy-paste that configuration to `pom.xml`.
-
