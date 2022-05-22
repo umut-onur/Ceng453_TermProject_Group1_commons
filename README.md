@@ -7,3 +7,4 @@ This repository contains common type definitions and other common code between
 It is intended to be used via [JitPack](https://jitpack.io/), a Java repository that allows importing arbitrary GitHub
 repositories as dependency.
 
+Build logs of commons can be found at https://jitpack.io/#umut-onur/Ceng453_TermProject_Group1_commons
