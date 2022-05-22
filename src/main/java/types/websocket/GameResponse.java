@@ -12,6 +12,8 @@ public class GameResponse {
     private Game game;                      // the updated game state that server sends to the client
     private HelloResponse helloResponse;    // the response of the hello protocol at the beginning of a websocket communication
 
+    public GameResponse() {}
+
     /**
      * Initializes the GameResponse with a Game.
      */
