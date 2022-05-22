@@ -2,7 +2,7 @@ package types.websocket;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import types.game.Game;
+import types.gameplay.Game;
 
 /**
  * GameResponse is the top-level message transmitted from server-to-client in a websocket communication.
