@@ -145,7 +145,7 @@ public class Game implements GameService {
     
     public Player playerOfUser(String userId) {
         for (Player p : this.players) {
-            if (p.getUserId().equals(userId)) {
+            if (Objects.equals(p.getUserId(), userId)) {
                 return p;
             }
         }
