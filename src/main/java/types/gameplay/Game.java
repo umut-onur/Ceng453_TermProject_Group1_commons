@@ -206,7 +206,7 @@ public class Game implements GameService {
         throw new TileNotFoundException("Income Tax");
     }
 
-    private boolean shouldEnd() {
+    public boolean shouldEnd() {
         for (Player p : this.players) {
             if (p.getBalance() < 0) {
                 return true;
