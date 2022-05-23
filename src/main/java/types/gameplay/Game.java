@@ -190,14 +190,10 @@ public class Game implements GameService {
     }
 
     void passTurnToNextPlayer() {
-        if (this.shouldEnd()) {
-            this.finish();
-        } else {
-            if (!currentPlayer.willRepeatTurn()) {
-                this.currentPlayer = (this.currentPlayer == this.players.get(this.players.size() - 1))
-                        ? this.players.get(0)
-                        : this.players.get(this.players.indexOf(this.currentPlayer) + 1);
-            }
+        if (!currentPlayer.willRepeatTurn()) {
+            this.currentPlayer = (this.currentPlayer == this.players.get(this.players.size() - 1))
+                    ? this.players.get(0)
+                    : this.players.get(this.players.indexOf(this.currentPlayer) + 1);
         }
     }
     
