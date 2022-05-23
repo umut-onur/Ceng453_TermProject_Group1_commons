@@ -178,10 +178,9 @@ public class Game implements GameService {
     @Override
     public void start() {
         this.initializeBoard();
-        this.currentPlayer = this.players.get(this.players.size() - 1);
+        this.currentPlayer = this.players.get(0);
         this.phase = GamePhase.roll;
         this.startedAt = System.currentTimeMillis() / 1000L;
-        this.passTurnToNextPlayer();
     }
 
     void passTurnToNextPlayer() {
