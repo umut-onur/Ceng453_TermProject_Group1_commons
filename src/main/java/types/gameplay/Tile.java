@@ -2,6 +2,7 @@ package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import types.gameplay.exceptions.TileNotBuyableException;
 
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
@@ -29,4 +30,8 @@ public interface Tile extends GameEntity {
     void handlePlayerPassBy(Player player);
     
     void handlePlayerStepOn(Player player);
+    
+    void handlePlayerBuy(Player player) throws TileNotBuyableException;
+    
+    void handlePlayerSell(Player player) throws TileNotBuyableException;
 }

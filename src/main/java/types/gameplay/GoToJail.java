@@ -1,6 +1,7 @@
 package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import types.gameplay.exceptions.TileNotBuyableException;
 
 @JsonTypeName("GoToJail")
 public class GoToJail implements Tile {
@@ -42,5 +43,15 @@ public class GoToJail implements Tile {
     @Override
     public void handlePlayerStepOn(Player player) {
         player.sendToJail();
+    }
+    
+    @Override
+    public void handlePlayerBuy(Player player) throws TileNotBuyableException {
+        throw new TileNotBuyableException(this.name);
+    }
+    
+    @Override
+    public void handlePlayerSell(Player player) throws TileNotBuyableException {
+        throw new TileNotBuyableException(this.name);
     }
 }

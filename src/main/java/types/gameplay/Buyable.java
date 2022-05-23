@@ -11,6 +11,9 @@ public interface Buyable extends Tile {
     
     void setOwner(Player owner);
     
+    @Override
     void handlePlayerBuy(Player player);
+    
+    @Override
     void handlePlayerSell(Player player);
 }
