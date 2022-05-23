@@ -134,7 +134,7 @@ public class Player implements GameEntity {
     }
     
     public Tile getCurrentTile() {
-        return this.game.getBoard().get(this.getPosition());
+        return (this.game.getBoard() != null) ? this.game.getBoard().get(this.getPosition()) : null;
     }
 
     public int getScore() {
