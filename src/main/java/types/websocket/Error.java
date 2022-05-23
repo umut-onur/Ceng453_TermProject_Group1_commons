@@ -8,6 +8,7 @@ public class Error {
         INTERNAL_ERROR,
         GAME_NOT_FOUND,
         PLAYER_NOT_FOUND,
+        GAME_NOT_IN_THIS_PHASE,
         NOT_ENOUGH_MONEY_TO_BUY,
         NOT_ENOUGH_PLAYERS,
         NOT_PLAYERS_TURN,
