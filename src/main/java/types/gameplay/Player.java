@@ -20,6 +20,7 @@ public class Player implements GameEntity {
     private int publicTransportsOwned;
     private int position;
     private Dice mostRecentDice;
+    public boolean isOnUnownedBuyable;
     
     public Player() {
         this.game = null;
@@ -32,6 +33,7 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = null;
+        this.isOnUnownedBuyable = false;
     }
 
     public Player(Game game, String userId, String name) {
@@ -45,6 +47,7 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
+        this.isOnUnownedBuyable = false;
     }
 
     public Player(Game game, String name) {
@@ -58,6 +61,7 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
+        this.isOnUnownedBuyable = false;
     }
 
     public Player(Game game, User user) {
@@ -71,6 +75,7 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
+        this.isOnUnownedBuyable = false;
     }
 
     public Player(Game game, User user, String name) {
@@ -84,6 +89,7 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
+        this.isOnUnownedBuyable = false;
     }
 
     @Override
@@ -213,10 +219,12 @@ public class Player implements GameEntity {
     
     public void acquirePublicTransport(PublicTransport publicTransport) {
         this.buyables.add(publicTransport);
+        this.publicTransportsOwned += 1;
     }
     
     public void releasePublicTransport(PublicTransport publicTransport) {
         this.buyables.remove(publicTransport);
+        this.publicTransportsOwned -= 1;
     }
     
     public void passByTile(Tile tile) {

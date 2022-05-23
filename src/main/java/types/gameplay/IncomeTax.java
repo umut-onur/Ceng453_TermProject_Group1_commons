@@ -56,6 +56,7 @@ public class IncomeTax implements Tile {
     @Override
     public void handlePlayerStepOn(Player player) {
         player.pay(this.taxAmount);
+        player.isOnUnownedBuyable = false;
     }
     
     @Override

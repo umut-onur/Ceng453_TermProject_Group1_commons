@@ -93,6 +93,9 @@ public class PublicTransport implements Buyable {
     public void handlePlayerStepOn(Player player) {
         if (this.owner != null) {
             player.pay(this.getRent(), this.owner);
+            player.isOnUnownedBuyable = false;
+        } else {
+            player.isOnUnownedBuyable = true;
         }
     }
 }

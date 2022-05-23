@@ -43,6 +43,7 @@ public class GoToJail implements Tile {
     @Override
     public void handlePlayerStepOn(Player player) {
         player.sendToJail();
+        player.isOnUnownedBuyable = false;
     }
     
     @Override

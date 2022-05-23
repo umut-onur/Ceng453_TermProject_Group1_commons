@@ -49,7 +49,9 @@ public class StartingPoint implements Tile {
     }
     
     @Override
-    public void handlePlayerStepOn(Player player) {}
+    public void handlePlayerStepOn(Player player) {
+        player.isOnUnownedBuyable = false;
+    }
     
     @Override
     public void handlePlayerBuy(Player player) throws TileNotBuyableException {
