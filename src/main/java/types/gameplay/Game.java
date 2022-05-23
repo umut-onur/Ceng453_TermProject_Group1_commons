@@ -1,8 +1,5 @@
 package types.gameplay;
 
-
-
-import types.gameplay.exceptions.NotEnoughPlayersException;
 import types.gameplay.exceptions.TileNotFoundException;
 
 import java.util.*;
@@ -12,7 +9,7 @@ public class Game implements GameService {
     private List<Player> players;
     private Player currentPlayer;
     private GamePhase phase;
-    private Dice dice;
+    private final Dice dice;
     private List<Tile> board;
     private Long startedAt;
     private Long finishedAt;
