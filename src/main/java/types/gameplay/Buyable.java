@@ -1,5 +1,7 @@
 package types.gameplay;
 
+import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
+
 public interface Buyable extends Tile {
     String getName();
     
@@ -12,7 +14,7 @@ public interface Buyable extends Tile {
     void setOwner(Player owner);
     
     @Override
-    void handlePlayerBuy(Player player);
+    void handlePlayerBuy(Player player) throws NotEnoughMoneyToBuyException;
     
     @Override
     void handlePlayerSell(Player player);

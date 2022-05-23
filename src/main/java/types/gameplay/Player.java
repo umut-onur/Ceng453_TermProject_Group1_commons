@@ -200,21 +200,23 @@ public class Player implements GameEntity {
     
     public void buy() throws NotEnoughMoneyToBuyException, TileNotBuyableException {
         Tile tile = this.game.getBoard().get(this.position);
-        try {
-            Buyable buyable = (Buyable) tile;
-            this.buyBuyable(buyable);
-        } catch (ClassCastException e) {
-            throw new TileNotBuyableException(tile.getName());
-        }
+        tile.handlePlayerBuy(this);
     }
 
-    private void buyBuyable(Buyable buyable) throws NotEnoughMoneyToBuyException {
-        if (this.balance < buyable.getFirstCost()) {
-            throw new NotEnoughMoneyToBuyException(this, buyable);
-        }
-        this.balance -= buyable.getFirstCost();
-        buyable.handlePlayerBuy(this);
-        this.buyables.add(buyable);
+    public void acquireProperty(Property property) {
+        this.buyables.add(property);
+    }
+    
+    public void releaseProperty(Property property) {
+        this.buyables.remove(property);
+    }
+    
+    public void acquirePublicTransport(PublicTransport publicTransport) {
+        this.buyables.add(publicTransport);
+    }
+    
+    public void releasePublicTransport(PublicTransport publicTransport) {
+        this.buyables.remove(publicTransport);
     }
     
     public void passByTile(Tile tile) {

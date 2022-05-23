@@ -1,6 +1,9 @@
 package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
+
+import java.io.NotActiveException;
 
 @JsonTypeName("Property")
 public class Property implements Buyable {
@@ -59,12 +62,19 @@ public class Property implements Buyable {
     }
     
     @Override
-    public void handlePlayerBuy(Player player) {
+    public void handlePlayerBuy(Player player) throws NotEnoughMoneyToBuyException {
+        if (player.getBalance() < this.getFirstCost()) {
+            throw new NotEnoughMoneyToBuyException(player, this);
+        }
+        player.pay(this.getFirstCost());
+        player.acquireProperty(this);
         this.owner = player;
     }
     
     @Override
     public void handlePlayerSell(Player player) {
+        player.earn(this.getFirstCost());
+        player.releaseProperty(this);
         this.owner = null;
     }
     

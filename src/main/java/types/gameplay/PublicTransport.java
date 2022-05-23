@@ -1,6 +1,7 @@
 package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
 
 @JsonTypeName("PublicTransport")
 public class PublicTransport implements Buyable {
@@ -59,14 +60,20 @@ public class PublicTransport implements Buyable {
     }
     
     @Override
-    public void handlePlayerBuy(Player player) {
+    public void handlePlayerBuy(Player player) throws NotEnoughMoneyToBuyException {
+        if (player.getBalance() < this.getFirstCost()) {
+            throw new NotEnoughMoneyToBuyException(player, this);
+        }
+        player.pay(this.getFirstCost());
+        player.acquirePublicTransport(this);
         this.owner = player;
-        player.incrementPublicTransportsOwned();
     }
     
+    @Override
     public void handlePlayerSell(Player player) {
+        player.earn(this.getFirstCost());
+        player.releasePublicTransport(this);
         this.owner = null;
-        player.decrementPublicTransportsOwned();
     }
     
     @Override
