@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import types.gameplay.exceptions.TileNotBuyableException;
 
+import java.util.Objects;
+
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.NAME,
     include = JsonTypeInfo.As.PROPERTY,
@@ -34,4 +36,12 @@ public interface Tile extends GameEntity {
     void handlePlayerBuy(Player player) throws TileNotBuyableException;
     
     void handlePlayerSell(Player player) throws TileNotBuyableException;
+    
+    @Override
+    default boolean is(Object obj) {
+        if (obj instanceof Tile t) {
+            return this.getGameId().equals(t.getGameId()) && this.getPosition() == t.getPosition();
+        }
+        return false;
+    }
 }

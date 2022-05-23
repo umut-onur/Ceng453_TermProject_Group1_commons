@@ -7,6 +7,7 @@ import types.gameplay.exceptions.TileNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Player implements GameEntity {
     private Game game;
@@ -245,6 +246,14 @@ public class Player implements GameEntity {
     public void endTurn() {
         this.game.passTurnToNextPlayer();
         this.game.setPhase(GamePhase.roll);
+    }
+    
+    @Override
+    public boolean is(Object obj) {
+        if (obj instanceof Player p) {
+            return this.getGameId().equals(p.getGameId()) && Objects.equals(this.getUserId(), p.getUserId());
+        }
+        return false;
     }
 
     public boolean equals(Object obj) {

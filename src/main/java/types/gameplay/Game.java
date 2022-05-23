@@ -237,7 +237,14 @@ public class Game implements GameService {
         }
         return GameStatus.alreadyFinished;
     }
-
+    
+    public boolean is(Object obj) {
+        if (obj instanceof Game g) {
+            return this.id.equals(g.id);
+        }
+        return false;
+    }
+    
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Game g) {
