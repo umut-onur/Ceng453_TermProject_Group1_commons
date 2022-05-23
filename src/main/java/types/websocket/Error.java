@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonSetter;
 public class Error {
     public enum ErrorType {
         INTERNAL_ERROR,
+        GAME_NOT_FOUND,
+        PLAYER_NOT_FOUND,
         NOT_ENOUGH_MONEY_TO_BUY,
         NOT_ENOUGH_PLAYERS,
         NOT_PLAYERS_TURN,
@@ -17,6 +19,11 @@ public class Error {
     private ErrorType errorType;
 
     public Error() {}
+    
+    public Error(String description, ErrorType errorType) {
+        this.description = description;
+        this.errorType = errorType;
+    }
 
     @JsonGetter
     public ErrorType getErrorType() {
