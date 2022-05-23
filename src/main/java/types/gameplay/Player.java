@@ -134,7 +134,9 @@ public class Player implements GameEntity {
     }
     
     public Tile getCurrentTile() {
-        return (this.game.getBoard() != null) ? this.game.getBoard().get(this.getPosition()) : null;
+        return (this.game.getBoard() != null && this.game.getBoard().size() > this.getPosition())
+                ? this.game.getBoard().get(this.getPosition())
+                : null;
     }
 
     public int getScore() {
@@ -255,6 +257,7 @@ public class Player implements GameEntity {
     public void cheatToGetBankrupt() throws TileNotFoundException {
         this.position = this.game.findIncomeTax();
         this.pay(10_000_000);
+        this.endTurn();
     }
     
     public void endTurn() {
