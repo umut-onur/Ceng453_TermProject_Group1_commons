@@ -1,6 +1,8 @@
 package types.websocket;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Error {
@@ -20,8 +22,9 @@ public class Error {
     private ErrorType errorType;
 
     public Error() {}
-    
-    public Error(String description, ErrorType errorType) {
+
+    @JsonCreator
+    public Error(@JsonProperty("description") String description, @JsonProperty("errorType") ErrorType errorType) {
         this.description = description;
         this.errorType = errorType;
     }
