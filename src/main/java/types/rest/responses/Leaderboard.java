@@ -2,12 +2,16 @@ package types.rest.responses;
 
 import types.gameplay.LeaderboardEntry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Leaderboard {
-    private final List<LeaderboardEntry> leaderboard;
+    private List<LeaderboardEntry> leaderboard;
+    public Leaderboard() {
+        this.leaderboard = new ArrayList<LeaderboardEntry>();
+    }
     
-    public Leaderboard(List<LeaderboardEntry> leaderboard) {
+    public void setLeaderboard(List<LeaderboardEntry> leaderboard) {
         this.leaderboard = leaderboard;
     }
     
