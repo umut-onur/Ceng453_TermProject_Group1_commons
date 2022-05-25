@@ -5,14 +5,26 @@ public class LeaderboardEntry {
     private String userName;
     private int score;
     
+    public LeaderboardEntry() {
+    
+    }
+    
     public LeaderboardEntry(String userId, String userName, int score) {
         this.userId = userId;
         this.userName = userName;
         this.score = score;
     }
     
-    public Integer getScore() {
-        return score;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+    
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    
+    public void setScore(int score) {
+        this.score = score;
     }
     
     public String getUserId() {
@@ -21,5 +33,9 @@ public class LeaderboardEntry {
     
     public String getUserName() {
         return userName;
+    }
+    
+    public Integer getScore() {
+        return score;
     }
 }
