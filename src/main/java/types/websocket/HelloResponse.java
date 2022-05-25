@@ -1,7 +1,6 @@
 package types.websocket;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.*;
 import org.springframework.lang.NonNull;
 
 /**
@@ -11,13 +10,13 @@ public class HelloResponse {
     private boolean ok;     // indicates whether hello message was successful or not
     private String error;   // when hello message was not successful, this error contains explanation of why
 
-    public HelloResponse() {}
-
-    public HelloResponse(boolean ok, @NonNull String error) {
+    @JsonCreator
+    public HelloResponse(@JsonProperty("ok") boolean ok, @NonNull @JsonProperty("error") String error) {
         this.ok = ok;
         this.error = error;
     }
 
+    @JsonIgnore
     public HelloResponse(boolean ok, @NonNull String format, @NonNull Object... args) {
         this.ok = ok;
         this.error = String.format(format, args);
