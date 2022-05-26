@@ -117,10 +117,6 @@ public class Player implements GameEntity {
         return turnsInJailLeft;
     }
 
-    public List<Buyable> getBuyables() {
-        return buyables;
-    }
-
     public void setBuyables(List<Buyable> buyables) {
         this.buyables = buyables;
     }
