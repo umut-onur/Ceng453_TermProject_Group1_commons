@@ -128,12 +128,6 @@ public class Player implements GameEntity {
     public int getPosition() {
         return position;
     }
-    
-    public Tile getCurrentTile() {
-        return (this.game.getBoard() != null && this.game.getBoard().size() > this.getPosition())
-                ? this.game.getBoard().get(this.getPosition())
-                : null;
-    }
 
     public int getScore() {
         int score = this.balance;
