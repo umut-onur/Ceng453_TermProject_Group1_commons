@@ -193,7 +193,7 @@ public class Player implements GameEntity {
     }
     private void advancePawn(int steps) {
         for (int i=0; i<steps; i++) {
-            this.position++;
+            this.position = ((this.position + 1) % 16);
             this.passByTile(this.game.getBoard().get(this.position));
         }
         this.stepOnTile(this.game.getBoard().get(this.position));
