@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -23,11 +24,17 @@ public class User implements UserDetails {
     @Column(name = "id")
     private String id;
 
-    @Column(name="username", length = 100, nullable = false, unique = true)
+    @Column(name = "username", length = 100, nullable = false, unique = true)
     private String username;
 
-    @Column(name="password", length = 60, nullable = false)
+    @Column(name = "password", length = 60, nullable = false)
     private String password;
+
+    @Column(name = "passwordCreatedAt", nullable = true)
+    private Timestamp passwordCreatedAt;
+
+    @Column(name = "passwordResetMailSent", nullable = true)
+    private Boolean passwordResetMailSent;
 
     public User() {}
 
@@ -110,6 +117,26 @@ public class User implements UserDetails {
     @JsonIgnore
     public boolean isEnabled() {
         return true;
+    }
+
+    @JsonIgnore
+    public Timestamp getPasswordCreatedAt() {
+        return passwordCreatedAt;
+    }
+
+    @JsonIgnore
+    public void setPasswordCreatedAt(Timestamp passwordCreatedAt) {
+        this.passwordCreatedAt = passwordCreatedAt;
+    }
+
+    @JsonIgnore
+    public Boolean getPasswordResetMailSent() {
+        return passwordResetMailSent;
+    }
+
+    @JsonIgnore
+    public void setPasswordResetMailSent(Boolean passwordResetMailSent) {
+        this.passwordResetMailSent = passwordResetMailSent;
     }
 
     @Override
