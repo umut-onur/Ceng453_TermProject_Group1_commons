@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -16,10 +17,19 @@ import static java.util.Objects.requireNonNull;
  * User implements the UserDetails interface in Spring Security so that
  * it can be used by it without a problem.
  */
+@Entity
 public class User implements UserDetails {
+    @Id
+    @Column(name = "id")
     private String id;
-    private final String username;
+
+    @Column(name="username", length = 100, nullable = false, unique = true)
+    private String username;
+
+    @Column(name="password", length = 60, nullable = false)
     private String password;
+
+    public User() {}
 
     @JsonCreator
     public User(
@@ -31,6 +41,8 @@ public class User implements UserDetails {
         this.username = requireNonNull(username);
         this.password = requireNonNull(password);
     }
+
+
 
     /**
      * Parses a json string into a User object and returns it.
