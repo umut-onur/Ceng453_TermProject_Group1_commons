@@ -3,6 +3,7 @@ package types.auth;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "RefreshTokens")
 public class RefreshToken {
     @EmbeddedId
     private RefreshTokenId refreshTokenId;  // multi-column primary key

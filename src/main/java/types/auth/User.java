@@ -19,6 +19,7 @@ import static java.util.Objects.requireNonNull;
  * it can be used by it without a problem.
  */
 @Entity
+@Table(name = "User")
 public class User implements UserDetails {
     @Id
     @Column(name = "id")
