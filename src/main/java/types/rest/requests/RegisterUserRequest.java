@@ -10,20 +10,28 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class RegisterUserRequest {
     private final String username;
+    private final String email;
     private final String password;
 
     @JsonCreator
     public RegisterUserRequest(
             @JsonProperty("username") String username,
+            @JsonProperty("email") String email,
             @JsonProperty("password") String password
     ) {
         this.username = username;
+        this.email = email;
         this.password = password;
     }
 
     @JsonGetter
     public String getUsername() {
         return username;
+    }
+
+    @JsonGetter
+    public String getEmail() {
+        return email;
     }
 
     @JsonGetter
