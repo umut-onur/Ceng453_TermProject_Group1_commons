@@ -28,6 +28,9 @@ public class User implements UserDetails {
     @Column(name = "username", length = 100, nullable = false, unique = true)
     private String username;
 
+    @Column(name = "email", length = 100, nullable = false, unique = true)
+    private String email;
+
     @Column(name = "password", length = 60, nullable = false)
     private String password;
 
@@ -43,14 +46,14 @@ public class User implements UserDetails {
     public User(
             @JsonProperty("id") final String id,
             @JsonProperty("username") final String username,
+            @JsonProperty("email") final String email,
             @JsonProperty("password") final String password) {
         super();
         this.id = requireNonNull(id);
         this.username = requireNonNull(username);
+        this.email = requireNonNull(email);
         this.password = requireNonNull(password);
     }
-
-
 
     /**
      * Parses a json string into a User object and returns it.
@@ -96,6 +99,11 @@ public class User implements UserDetails {
         return this.username;
     }
 
+    @JsonGetter
+    public String getEmail() {
+        return email;
+    }
+
     @Override
     @JsonIgnore
     public boolean isAccountNonExpired() {
@@ -118,6 +126,16 @@ public class User implements UserDetails {
     @JsonIgnore
     public boolean isEnabled() {
         return true;
+    }
+
+    @JsonSetter
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @JsonSetter
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @JsonIgnore
