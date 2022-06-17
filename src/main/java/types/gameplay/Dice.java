@@ -27,8 +27,10 @@ public class Dice {
 
     public void roll() {
         Random rand = new Random();
-        this.dieOne = rand.nextInt(6) + 1;
-        this.dieTwo = rand.nextInt(6) + 1;
+        //this.dieOne = rand.nextInt(6) + 1;
+        //this.dieTwo = rand.nextInt(6) + 1;
+        this.dieOne = 2;
+        this.dieTwo = 2;
     }
 
     public int getDieOne() {
