@@ -212,12 +212,12 @@ public class Player implements GameEntity {
     
     public void acquirePublicTransport(PublicTransport publicTransport) {
         this.buyables.add(publicTransport);
-        this.publicTransportsOwned += 1;
+        this.incrementPublicTransportsOwned();
     }
     
     public void releasePublicTransport(PublicTransport publicTransport) {
         this.buyables.remove(publicTransport);
-        this.publicTransportsOwned -= 1;
+        this.decrementPublicTransportsOwned();
     }
     
     public void passByTile(Tile tile) {
@@ -315,9 +315,5 @@ public class Player implements GameEntity {
         return String.format("Player: gameId=%s, userId=%s, name=%s, position=%d, balance=%d, doubleRollStreak=%d, turnsInJailLeft=%d, publicTransportsOwned=%d, buyables=%s",
                 this.getGameId(), this.userId, this.name, this.position, this.balance, this.doubleRollStreak,
                 this.turnsInJailLeft, this.publicTransportsOwned, this.buyables);
-    }
-
-    public void notifyClient(Game game) {
-        // TODO: Implement this with web sockets
     }
 }
