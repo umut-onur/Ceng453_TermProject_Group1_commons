@@ -98,4 +98,9 @@ public class PublicTransport implements Buyable {
             player.isOnUnownedBuyable = true;
         }
     }
+
+    @Override
+    public TileType getType() {
+        return TileType.PUBLIC_TRANSPORT;
+    }
 }

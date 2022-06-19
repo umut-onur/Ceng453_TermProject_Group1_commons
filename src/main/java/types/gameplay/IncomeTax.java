@@ -68,4 +68,9 @@ public class IncomeTax implements Tile {
     public void handlePlayerSell(Player player) throws TileNotBuyableException {
         throw new TileNotBuyableException(this.name);
     }
+
+    @Override
+    public TileType getType() {
+        return TileType.INCOME_TAX;
+    }
 }

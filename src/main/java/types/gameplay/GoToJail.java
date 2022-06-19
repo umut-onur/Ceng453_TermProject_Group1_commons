@@ -55,4 +55,9 @@ public class GoToJail implements Tile {
     public void handlePlayerSell(Player player) throws TileNotBuyableException {
         throw new TileNotBuyableException(this.name);
     }
+
+    @Override
+    public TileType getType() {
+        return TileType.GO_TO_JAIL;
+    }
 }

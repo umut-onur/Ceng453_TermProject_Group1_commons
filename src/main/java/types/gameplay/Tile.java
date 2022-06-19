@@ -24,10 +24,20 @@ import java.util.Objects;
 })
 
 public interface Tile extends GameEntity {
+    /**
+     * @return The name of this Tile.
+     */
     String getName();
-    
+
+    /**
+     * @return The position of this Tile as index value, between 0 and 15.
+     */
     int getPosition();
-    
+
+    /**
+     * Sets the position (i.e. index) of this Tile.
+     * @param position The new positions of this tile. Must be in range [0, 15].
+     */
     void setPosition(int position);
     
     void handlePlayerPassBy(Player player);
@@ -45,4 +55,9 @@ public interface Tile extends GameEntity {
         }
         return false;
     }
+
+    /**
+     * @return The type of this Tile.
+     */
+    TileType getType();
 }

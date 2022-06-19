@@ -62,4 +62,9 @@ public class StartingPoint implements Tile {
     public void handlePlayerSell(Player player) throws TileNotBuyableException {
         throw new TileNotBuyableException(this.name);
     }
+
+    @Override
+    public TileType getType() {
+        return TileType.STARTING_POINT;
+    }
 }

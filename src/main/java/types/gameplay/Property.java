@@ -100,4 +100,9 @@ public class Property implements Buyable {
             player.isOnUnownedBuyable = true;
         }
     }
+
+    @Override
+    public TileType getType() {
+        return TileType.PROPERTY;
+    }
 }
