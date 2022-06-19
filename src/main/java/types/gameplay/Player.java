@@ -1,5 +1,6 @@
 package types.gameplay;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import types.auth.User;
 import types.gameplay.exceptions.*;
 
@@ -135,6 +136,11 @@ public class Player implements GameEntity {
 
     public void setBalance(int balance) {
         this.balance = balance;
+    }
+
+    @JsonIgnore
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     public void incrementDoubleRollStreak() {
