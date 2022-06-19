@@ -3,6 +3,7 @@ package types.gameplay;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import types.gameplay.exceptions.TileNotBuyableException;
 import types.gameplay.exceptions.TileNotSellableException;
+import types.gameplay.exceptions.TileOfTypeNotFoundException;
 
 @JsonTypeName("GoToJail")
 public class GoToJail implements Tile {
@@ -47,7 +48,7 @@ public class GoToJail implements Tile {
     public void handlePlayerPassBy(Player player) {}
     
     @Override
-    public void handlePlayerStepOn(Player player) {
+    public void handlePlayerStepOn(Player player) throws TileOfTypeNotFoundException {
         player.sendToJail();
     }
     

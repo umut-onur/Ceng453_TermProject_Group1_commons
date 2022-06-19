@@ -1,6 +1,6 @@
 package types.gameplay;
 
-import types.gameplay.exceptions.TileNotFoundException;
+import types.gameplay.exceptions.TileOfTypeNotFoundException;
 
 import java.util.*;
 
@@ -195,15 +195,19 @@ public class Game implements GameService {
                     ? this.players.get(0)
                     : this.players.get(this.players.indexOf(this.currentPlayer) + 1);
         }
+        if (this.currentPlayer.getTurnsInJailLeft() > 0) {
+            this.currentPlayer.decrementTurnsInJailLeft();
+            this.passTurnToNextPlayer();
+        }
     }
     
-    public int findIncomeTax() throws TileNotFoundException {
+    public int findFirstTileOfType(TileType type) throws TileOfTypeNotFoundException {
         for (Tile t : this.board) {
-            if (t.getName().contains("Income Tax")) {
+            if (t.getType() == type) {
                 return t.getPosition();
             }
         }
-        throw new TileNotFoundException("Income Tax");
+        throw new TileOfTypeNotFoundException(type);
     }
 
     public boolean shouldEnd() {

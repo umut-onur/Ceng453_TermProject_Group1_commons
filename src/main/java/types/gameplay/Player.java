@@ -149,8 +149,8 @@ public class Player implements GameEntity {
         this.turnsInJailLeft -= 1;
     }
 
-    public void sendToJail() {
-        
+    public void sendToJail() throws TileOfTypeNotFoundException {
+        this.position = this.game.findFirstTileOfType(TileType.JUST_VISITING);
         this.turnsInJailLeft = 2;
     }
 
@@ -174,7 +174,7 @@ public class Player implements GameEntity {
         this.game.getDice().roll();
         this.mostRecentDice = this.game.getDice();
     }
-    public void handleDice() {
+    public void handleDice() throws TileOfTypeNotFoundException {
         if (this.getMostRecentDice().isDoubleDice()) {
             this.doubleRollStreak++;
             if (this.doubleRollStreak == 3) {
@@ -188,7 +188,7 @@ public class Player implements GameEntity {
             advancePawn(this.getMostRecentDice().getTotal());
         }
     }
-    private void advancePawn(int steps) {
+    private void advancePawn(int steps) throws TileOfTypeNotFoundException {
         for (int i=0; i<steps; i++) {
             this.position = ((this.position + 1) % 16);
             this.passByTile(this.game.getBoard().get(this.position));
@@ -224,7 +224,7 @@ public class Player implements GameEntity {
         tile.handlePlayerPassBy(this);
     }
     
-    public void stepOnTile(Tile tile) {
+    public void stepOnTile(Tile tile) throws TileOfTypeNotFoundException {
         tile.handlePlayerStepOn(this);
     }
     
@@ -278,8 +278,8 @@ public class Player implements GameEntity {
         this.balance += amount;
     }
 
-    public void cheatToGetBankrupt() throws TileNotFoundException {
-        this.position = this.game.findIncomeTax();
+    public void cheatToGetBankrupt() throws TileOfTypeNotFoundException {
+        this.position = this.game.findFirstTileOfType(TileType.INCOME_TAX);
         this.pay(10_000_000);
         this.endTurn();
     }

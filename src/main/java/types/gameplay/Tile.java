@@ -2,10 +2,7 @@ package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
-import types.gameplay.exceptions.TileNotBuyableException;
-import types.gameplay.exceptions.TileNotSellableException;
-import types.gameplay.exceptions.TileTradeException;
+import types.gameplay.exceptions.*;
 
 import java.util.Objects;
 
@@ -47,7 +44,7 @@ public interface Tile extends GameEntity {
     
     void handlePlayerPassBy(Player player);
     
-    void handlePlayerStepOn(Player player);
+    void handlePlayerStepOn(Player player) throws TileOfTypeNotFoundException;
     
     void handlePlayerBuy(Player player) throws TileNotBuyableException, NotEnoughMoneyToBuyException;
     
