@@ -110,4 +110,9 @@ public class Property implements Buyable {
             player.pay(this.getRent(), this.owner);
         }
     }
+
+    @Override
+    public TileType getType() {
+        return TileType.PROPERTY;
+    }
 }

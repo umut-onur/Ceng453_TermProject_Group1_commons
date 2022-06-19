@@ -3,62 +3,41 @@ package types.websocket;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSetter;
-import org.springframework.lang.NonNull;
-import types.usercommands.UserCommand;
 
 /**
  * GameMessage is the top-level message transmitted from client-to-server in a websocket communication.
- * It must either have <code>helloMessage</code> or <code>userCommand</code> fields set. It cannot have both.
+ * It only contains the id of the player and id of the game.
  */
 public class GameMessage {
-    private HelloMessage helloMessage;  // the hello message that client sends after joining a game
-    private UserCommand userCommand;    // the user-command message that client sends after making a move in the game
+    private String userId;
+    private String gameId;
 
-    public GameMessage() {}
-
-    /**
-     * Initializes the GameMessage with a HelloMessage.
-     */
-    public GameMessage(@NonNull HelloMessage helloMessage) {
-        this.helloMessage = helloMessage;
+    public GameMessage() {
+        this("", "");
     }
 
-    /**
-     * Initializes the GameMessage with a UserCommand.
-     */
-    public GameMessage(@NonNull UserCommand userCommand) {
-        this.userCommand = userCommand;
+    public GameMessage(@JsonProperty("userId") String userId, @JsonProperty("gameId") String gameId) {
+        this.userId = userId;
+        this.gameId = gameId;
     }
 
     @JsonGetter
-    public HelloMessage getHelloMessage() {
-        return helloMessage;
+    public String getUserId() {
+        return userId;
     }
 
     @JsonGetter
-    public UserCommand getUserCommand() {
-        return userCommand;
+    public String getGameId() {
+        return gameId;
     }
 
     @JsonSetter
-    public void setHelloMessage(HelloMessage helloMessage) {
-        this.helloMessage = helloMessage;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     @JsonSetter
-    public void setUserCommand(UserCommand userCommand) {
-        this.userCommand = userCommand;
-    }
-
-    /**
-     * @return The type of this message based on its internal fields.
-     */
-    public GameMessageType getMessageType() {
-        if ((this.helloMessage == null && this.userCommand == null) || (this.helloMessage != null && this.userCommand != null)) {
-            return GameMessageType.Invalid;
-        } else if (this.helloMessage != null) {
-            return GameMessageType.Hello;
-        }
-        return GameMessageType.UserCommand;
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 }

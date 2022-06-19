@@ -58,4 +58,9 @@ public class JustVisiting implements Tile {
     public void handlePlayerSell(Player player) throws TileNotSellableException {
         throw new TileNotSellableException(this);
     }
+
+    @Override
+    public TileType getType() {
+        return TileType.JUST_VISITING;
+    }
 }
