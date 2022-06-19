@@ -2,6 +2,8 @@ package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
+import types.gameplay.exceptions.TileNotBuyableException;
+import types.gameplay.exceptions.TileNotSellableException;
 
 import java.io.NotActiveException;
 
@@ -62,7 +64,10 @@ public class Property implements Buyable {
     }
     
     @Override
-    public void handlePlayerBuy(Player player) throws NotEnoughMoneyToBuyException {
+    public void handlePlayerBuy(Player player) throws NotEnoughMoneyToBuyException, TileNotBuyableException {
+        if (!this.canBeBought()) {
+            throw new TileNotBuyableException(this);
+        }
         if (player.getBalance() < this.getFirstCost()) {
             throw new NotEnoughMoneyToBuyException(player, this);
         }
@@ -72,7 +77,10 @@ public class Property implements Buyable {
     }
     
     @Override
-    public void handlePlayerSell(Player player) {
+    public void handlePlayerSell(Player player) throws TileNotSellableException {
+        if (!this.owner.is(player)) {
+            throw new TileNotSellableException(this);
+        }
         player.earn(this.getFirstCost());
         player.releaseProperty(this);
         this.owner = null;
@@ -81,6 +89,11 @@ public class Property implements Buyable {
     @Override
     public int getPosition() {
         return position;
+    }
+    
+    @Override
+    public boolean canBeBought() {
+        return this.owner == null;
     }
     
     @Override
@@ -95,9 +108,6 @@ public class Property implements Buyable {
     public void handlePlayerStepOn(Player player) {
         if (this.owner != null) {
             player.pay(this.getRent(), this.owner);
-            player.isOnUnownedBuyable = false;
-        } else {
-            player.isOnUnownedBuyable = true;
         }
     }
 }

@@ -86,6 +86,10 @@ public class Game implements GameService {
         return currentPlayer;
     }
     
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+    
     public GamePhase getPhase() {
         return phase;
     }
@@ -97,10 +101,6 @@ public class Game implements GameService {
     @Override
     public Dice getDice() {
         return dice;
-    }
-    
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
     }
 
     @Override

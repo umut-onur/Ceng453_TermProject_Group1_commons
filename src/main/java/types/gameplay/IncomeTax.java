@@ -2,6 +2,7 @@ package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import types.gameplay.exceptions.TileNotBuyableException;
+import types.gameplay.exceptions.TileNotSellableException;
 
 @JsonTypeName("IncomeTax")
 public class IncomeTax implements Tile {
@@ -41,6 +42,11 @@ public class IncomeTax implements Tile {
         return position;
     }
     
+    @Override
+    public boolean canBeBought() {
+        return false;
+    }
+    
     public int getTaxAmount() {
         return taxAmount;
     }
@@ -56,16 +62,15 @@ public class IncomeTax implements Tile {
     @Override
     public void handlePlayerStepOn(Player player) {
         player.pay(this.taxAmount);
-        player.isOnUnownedBuyable = false;
     }
     
     @Override
     public void handlePlayerBuy(Player player) throws TileNotBuyableException {
-        throw new TileNotBuyableException(this.name);
+        throw new TileNotBuyableException(this);
     }
     
     @Override
-    public void handlePlayerSell(Player player) throws TileNotBuyableException {
-        throw new TileNotBuyableException(this.name);
+    public void handlePlayerSell(Player player) throws TileNotSellableException {
+        throw new TileNotSellableException(this);
     }
 }

@@ -1,7 +1,9 @@
 package types.gameplay.exceptions;
 
-public class TileNotBuyableException extends GameplayException {
-    public TileNotBuyableException(String tileName) {
-        super("Tile with name " + tileName + " is not suitable for purchase.");
+import types.gameplay.Tile;
+
+public class TileNotBuyableException extends TileTradeException{
+    public TileNotBuyableException(Tile tile) {
+        super("Tile with name " + tile.getName() + " is not suitable for purchase.");
     }
 }

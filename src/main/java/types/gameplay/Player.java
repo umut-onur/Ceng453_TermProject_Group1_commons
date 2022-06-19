@@ -1,9 +1,7 @@
 package types.gameplay;
 
 import types.auth.User;
-import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
-import types.gameplay.exceptions.TileNotBuyableException;
-import types.gameplay.exceptions.TileNotFoundException;
+import types.gameplay.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +18,6 @@ public class Player implements GameEntity {
     private int publicTransportsOwned;
     private int position;
     private Dice mostRecentDice;
-    public boolean isOnUnownedBuyable;
     
     public Player() {
         this.game = null;
@@ -33,7 +30,6 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = null;
-        this.isOnUnownedBuyable = false;
     }
 
     public Player(Game game, String userId, String name) {
@@ -47,7 +43,6 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
-        this.isOnUnownedBuyable = false;
     }
 
     public Player(Game game, String name) {
@@ -61,7 +56,6 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
-        this.isOnUnownedBuyable = false;
     }
 
     public Player(Game game, User user) {
@@ -75,7 +69,6 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
-        this.isOnUnownedBuyable = false;
     }
 
     public Player(Game game, User user, String name) {
@@ -89,7 +82,6 @@ public class Player implements GameEntity {
         this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
-        this.isOnUnownedBuyable = false;
     }
 
     @Override
@@ -116,7 +108,11 @@ public class Player implements GameEntity {
     public int getTurnsInJailLeft() {
         return turnsInJailLeft;
     }
-
+    
+    public boolean isOnUnownedBuyable() {
+        return this.game.getBoard().get(this.getPosition()).canBeBought();
+    }
+    
     public void setBuyables(List<Buyable> buyables) {
         this.buyables = buyables;
     }
@@ -154,6 +150,7 @@ public class Player implements GameEntity {
     }
 
     public void sendToJail() {
+        
         this.turnsInJailLeft = 2;
     }
 
@@ -238,6 +235,43 @@ public class Player implements GameEntity {
     public void pay(int amount, Player player) {
         this.balance -= amount;
         player.balance += amount;
+    }
+    
+    public void tradeWithPlayer(Player otherPlayer, List<Buyable> incomingBuyables, List<Buyable> outgoingBuyables, int netIncome)
+            throws TileNotSellableException, TileNotBuyableException {
+        List<Buyable> buyablesFromThisToOther = new ArrayList<>();
+        List<Buyable> buyablesFromOtherToThis = new ArrayList<>();
+        
+        // Check if each player owns the supposed buyables, and carry the buyables to middle lists that will be added to
+        // each other's buyables in the end.
+        try {
+            for (Buyable b : outgoingBuyables) {
+                if (!this.buyables.contains(b)) {
+                    throw new TileNotSellableException(b);
+                }
+                buyablesFromThisToOther.add(b);
+                this.buyables.remove(b);
+            }
+            for (Buyable b : incomingBuyables) {
+                if (!otherPlayer.buyables.contains(b)) {
+                    throw new TileNotBuyableException(b);
+                }
+                buyablesFromOtherToThis.add(b);
+                otherPlayer.buyables.remove(b);
+            }
+            
+            // All buyables are properly owned by supposed players, committing the changes.
+            this.buyables.addAll(buyablesFromOtherToThis);
+            otherPlayer.buyables.addAll(buyablesFromThisToOther);
+            otherPlayer.pay(netIncome, this);
+            
+        // Some buyable is not owned by its supposed player (or any other exception that prevents the transaction from
+        // being carried out), reverting the changes and re-throwing the exception.
+        } catch (TileTradeException e) {
+            this.buyables.addAll(buyablesFromThisToOther);
+            otherPlayer.buyables.addAll(buyablesFromOtherToThis);
+            throw e;
+        }
     }
     
     public void earn(int amount) {

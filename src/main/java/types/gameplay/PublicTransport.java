@@ -2,6 +2,7 @@ package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
+import types.gameplay.exceptions.TileNotBuyableException;
 
 @JsonTypeName("PublicTransport")
 public class PublicTransport implements Buyable {
@@ -45,6 +46,11 @@ public class PublicTransport implements Buyable {
     }
     
     @Override
+    public boolean canBeBought() {
+        return this.owner == null;
+    }
+    
+    @Override
     public int getRent() {
         return (this.owner != null) ? (firstCost / 10) * this.owner.getPublicTransportsOwned() : (firstCost / 10);
     }
@@ -60,7 +66,10 @@ public class PublicTransport implements Buyable {
     }
     
     @Override
-    public void handlePlayerBuy(Player player) throws NotEnoughMoneyToBuyException {
+    public void handlePlayerBuy(Player player) throws NotEnoughMoneyToBuyException, TileNotBuyableException {
+        if (!this.canBeBought()) {
+            throw new TileNotBuyableException(this);
+        }
         if (player.getBalance() < this.getFirstCost()) {
             throw new NotEnoughMoneyToBuyException(player, this);
         }
@@ -93,9 +102,6 @@ public class PublicTransport implements Buyable {
     public void handlePlayerStepOn(Player player) {
         if (this.owner != null) {
             player.pay(this.getRent(), this.owner);
-            player.isOnUnownedBuyable = false;
-        } else {
-            player.isOnUnownedBuyable = true;
         }
     }
 }

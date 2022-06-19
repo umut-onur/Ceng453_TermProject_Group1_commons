@@ -2,6 +2,7 @@ package types.gameplay;
 
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import types.gameplay.exceptions.TileNotBuyableException;
+import types.gameplay.exceptions.TileNotSellableException;
 
 @JsonTypeName("JustVisiting")
 public class JustVisiting implements Tile {
@@ -33,6 +34,11 @@ public class JustVisiting implements Tile {
     }
     
     @Override
+    public boolean canBeBought() {
+        return false;
+    }
+    
+    @Override
     public void setPosition(int position) {
         this.position = position;
     }
@@ -41,17 +47,15 @@ public class JustVisiting implements Tile {
     public void handlePlayerPassBy(Player player) {}
     
     @Override
-    public void handlePlayerStepOn(Player player) {
-        player.isOnUnownedBuyable = false;
-    }
+    public void handlePlayerStepOn(Player player) {}
     
     @Override
     public void handlePlayerBuy(Player player) throws TileNotBuyableException {
-        throw new TileNotBuyableException(this.name);
+        throw new TileNotBuyableException(this);
     }
     
     @Override
-    public void handlePlayerSell(Player player) throws TileNotBuyableException {
-        throw new TileNotBuyableException(this.name);
+    public void handlePlayerSell(Player player) throws TileNotSellableException {
+        throw new TileNotSellableException(this);
     }
 }

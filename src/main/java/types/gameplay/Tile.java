@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
 import types.gameplay.exceptions.TileNotBuyableException;
+import types.gameplay.exceptions.TileNotSellableException;
+import types.gameplay.exceptions.TileTradeException;
 
 import java.util.Objects;
 
@@ -28,6 +30,8 @@ public interface Tile extends GameEntity {
     
     int getPosition();
     
+    boolean canBeBought();
+    
     void setPosition(int position);
     
     void handlePlayerPassBy(Player player);
@@ -36,7 +40,7 @@ public interface Tile extends GameEntity {
     
     void handlePlayerBuy(Player player) throws TileNotBuyableException, NotEnoughMoneyToBuyException;
     
-    void handlePlayerSell(Player player) throws TileNotBuyableException;
+    void handlePlayerSell(Player player) throws TileNotSellableException;
     
     @Override
     default boolean is(Object obj) {
