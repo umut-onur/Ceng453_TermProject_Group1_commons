@@ -5,8 +5,6 @@ package types.websocket;
  */
 public enum GameMessageType {
     Invalid,
-    Hello,
     GameState,
-    UserCommand,
     Error
 }
