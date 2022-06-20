@@ -31,6 +31,14 @@ public class TradeOffer extends GameMessage {
         this. netBid = netBid;
     }
     
+    public Player getSender() {
+        return this.sender;
+    }
+    
+    public Player getReceiver() {
+        return this.receiver;
+    }
+    
     public List<Buyable> getBuyablesIn() {
         return this.buyablesIn;
     }
