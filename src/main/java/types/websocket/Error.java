@@ -15,7 +15,9 @@ public class Error {
         NOT_ENOUGH_PLAYERS,
         NOT_PLAYERS_TURN,
         TILE_NOT_BUYABLE,
-        TILE_NOT_FOUND
+        TILE_NOT_SELLABLE,
+        TILE_OF_TYPE_NOT_FOUND,
+        INVALID_TRADE_OFFER
     }
 
     private String description;
