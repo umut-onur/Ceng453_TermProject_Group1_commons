@@ -3,9 +3,10 @@ package types.gameplay;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
 import java.util.Random;
 
-public class Dice {
+public class Dice implements GameEntity {
     private Game game;
     private int dieOne;
     private int dieTwo;
@@ -21,10 +22,11 @@ public class Dice {
         this(game, 0, 0);
     }
 
+    @Override
     public String getGameId() {
-        return game.getId();
+        return this.game.getId();
     }
-
+    
     public void roll() {
         Random rand = new Random();
         this.dieOne = rand.nextInt(6) + 1;

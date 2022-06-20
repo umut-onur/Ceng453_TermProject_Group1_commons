@@ -3,7 +3,6 @@ package types.gameplay;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import types.auth.User;
 import types.gameplay.exceptions.*;
-import types.websocket.TradeOffer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -296,12 +295,14 @@ public class Player implements GameEntity {
         this.game.setPhase(GamePhase.roll);
     }
     
-    @Override
-    public boolean is(Object obj) {
-        if (obj instanceof Player p) {
-            return this.getGameId().equals(p.getGameId()) && Objects.equals(this.getUserId(), p.getUserId());
-        }
-        return false;
+    /**
+     * Returns whether this <code>Player</code> is the same <code>Player</code> as <code>p</code>.
+     *
+     * @param p The other <code>Tile</code> instance to be compared against this <code>Player</code> instance
+     * @return Whether this and <code>p</code> are the same <code>Player</code>
+     */
+    public boolean is(Player p) {
+        return this.getGameId().equals(p.getGameId()) && Objects.equals(this.getUserId(), p.getUserId());
     }
 
     public boolean equals(Object obj) {

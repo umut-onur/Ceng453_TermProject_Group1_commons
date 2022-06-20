@@ -74,12 +74,14 @@ public interface Tile extends GameEntity {
      */
     void handlePlayerSell(Player player) throws TileNotSellableException;
     
-    @Override
-    default boolean is(Object obj) {
-        if (obj instanceof Tile t) {
-            return this.getGameId().equals(t.getGameId()) && this.getPosition() == t.getPosition();
-        }
-        return false;
+    /**
+     * Returns whether this <code>Tile</code> is the same <code>Tile</code> as <code>t</code>.
+     *
+     * @param t The other <code>Tile</code> instance to be compared against this <code>Tile</code> instance
+     * @return Whether this and <code>t</code> are the same <code>Tile</code>
+     */
+    default boolean is(Tile t) {
+        return t != null && this.getGameId().equals(t.getGameId()) && this.getPosition() == t.getPosition();
     }
 
     /**
