@@ -13,10 +13,8 @@ public class Player implements GameEntity {
     private String userId;
     private String name;
     private int balance;
-    private List<Buyable> buyables;
     private int doubleRollStreak;
     private int turnsInJailLeft;
-    private int publicTransportsOwned;
     private int position;
     private Dice mostRecentDice;
     
@@ -25,10 +23,8 @@ public class Player implements GameEntity {
         this.userId = null;
         this.name = null;
         this.balance = 1500;
-        this.buyables = new ArrayList<>();
         this.doubleRollStreak = 0;
         this.turnsInJailLeft = 0;
-        this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = null;
     }
@@ -38,10 +34,8 @@ public class Player implements GameEntity {
         this.userId = userId;
         this.name = name;
         this.balance = 1500;
-        this.buyables = new ArrayList<>();
         this.doubleRollStreak = 0;
         this.turnsInJailLeft = 0;
-        this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
     }
@@ -51,10 +45,8 @@ public class Player implements GameEntity {
         this.userId = null;
         this.name = name;
         this.balance = 1500;
-        this.buyables = new ArrayList<>();
         this.doubleRollStreak = 0;
         this.turnsInJailLeft = 0;
-        this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
     }
@@ -64,10 +56,8 @@ public class Player implements GameEntity {
         this.userId = user.getId();
         this.name = user.getUsername();
         this.balance = 1500;
-        this.buyables = new ArrayList<>();
         this.doubleRollStreak = 0;
         this.turnsInJailLeft = 0;
-        this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
     }
@@ -77,10 +67,8 @@ public class Player implements GameEntity {
         this.userId = user.getId();
         this.name = name;
         this.balance = 1500;
-        this.buyables = new ArrayList<>();
         this.doubleRollStreak = 0;
         this.turnsInJailLeft = 0;
-        this.publicTransportsOwned = 0;
         this.position = 0;
         this.mostRecentDice = this.game.getDice();
     }
@@ -114,16 +102,31 @@ public class Player implements GameEntity {
         return this.game.getBoard().get(this.getPosition()).canBeBought();
     }
     
-    public void setBuyables(List<Buyable> buyables) {
-        this.buyables = buyables;
+    public List<Buyable> buyables() {
+        List<Buyable> buyables = new ArrayList<>();
+        for (Tile t : this.game.getBoard()) {
+            if (t.getType().equals(TileType.PROPERTY) || t.getType().equals(TileType.PUBLIC_TRANSPORT)) {
+                Buyable b = (Buyable) t;
+                if (this.ownsBuyable(b)) {
+                    buyables.add(b);
+                }
+            }
+        }
+        return buyables;
+    }
+    
+    public int numberOfPublicTransportsOwned() {
+        int numberOfPublicTransportsOwned = 0;
+        for (Buyable b : this.buyables()) {
+            if (b.getType().equals(TileType.PUBLIC_TRANSPORT)) {
+                numberOfPublicTransportsOwned++;
+            }
+        }
+        return numberOfPublicTransportsOwned;
     }
     
     public boolean ownsBuyable(Buyable buyable) {
         return buyable.getOwner().is(this);
-    }
-
-    public int getPublicTransportsOwned() {
-        return publicTransportsOwned;
     }
 
     public int getPosition() {
@@ -132,7 +135,7 @@ public class Player implements GameEntity {
 
     public int getScore() {
         int score = this.balance;
-        for (Buyable b : this.buyables) {
+        for (Buyable b : this.buyables()) {
             score += b.getFirstCost();
         }
         return score;
@@ -162,14 +165,6 @@ public class Player implements GameEntity {
     public void sendToJail() throws TileOfTypeNotFoundException {
         this.position = this.game.findFirstTileOfType(TileType.JUST_VISITING);
         this.turnsInJailLeft = 2;
-    }
-
-    public void incrementPublicTransportsOwned() {
-        this.publicTransportsOwned += 1;
-    }
-
-    public void decrementPublicTransportsOwned() {
-        this.publicTransportsOwned -= 1;
     }
     
     public Dice getMostRecentDice() {
@@ -211,24 +206,6 @@ public class Player implements GameEntity {
         Tile tile = this.game.getBoard().get(this.position);
         tile.handlePlayerBuy(this);
     }
-
-    public void acquireProperty(Property property) {
-        this.buyables.add(property);
-    }
-    
-    public void releaseProperty(Property property) {
-        this.buyables.remove(property);
-    }
-    
-    public void acquirePublicTransport(PublicTransport publicTransport) {
-        this.buyables.add(publicTransport);
-        this.incrementPublicTransportsOwned();
-    }
-    
-    public void releasePublicTransport(PublicTransport publicTransport) {
-        this.buyables.remove(publicTransport);
-        this.decrementPublicTransportsOwned();
-    }
     
     public void passByTile(Tile tile) {
         tile.handlePlayerPassBy(this);
@@ -254,35 +231,27 @@ public class Player implements GameEntity {
         
         // Check if each player owns the supposed buyables, and carry the buyables to middle lists that will be added to
         // each other's buyables in the end.
-        try {
-            for (Buyable b : outgoingBuyables) {
-                if (!b.getOwner().is(this)) {
-                    throw new TileNotSellableException(b);
-                }
-                buyablesFromThisToOther.add(b);
-                this.buyables.remove(b);
+        for (Buyable b : outgoingBuyables) {
+            if (!b.getOwner().is(this)) {
+                throw new TileNotSellableException(b);
             }
-            for (Buyable b : incomingBuyables) {
-                if (!b.getOwner().is(otherPlayer)) {
-                    throw new TileNotBuyableException(b);
-                }
-                buyablesFromOtherToThis.add(b);
-                otherPlayer.buyables.remove(b);
-            }
-            
-            // All buyables are properly owned by supposed players, committing the changes.
-            // TODO: Change the owner of each buyable
-            this.buyables.addAll(buyablesFromOtherToThis);
-            otherPlayer.buyables.addAll(buyablesFromThisToOther);
-            this.pay(netBid, otherPlayer);
-            
-        // Some buyable is not owned by its supposed player (or any other exception that prevents the transaction from
-        // being carried out), reverting the changes and re-throwing the exception.
-        } catch (TileTradeException e) {
-            this.buyables.addAll(buyablesFromThisToOther);
-            otherPlayer.buyables.addAll(buyablesFromOtherToThis);
-            throw e;
+            buyablesFromThisToOther.add(b);
         }
+        for (Buyable b : incomingBuyables) {
+            if (!b.getOwner().is(otherPlayer)) {
+                throw new TileNotBuyableException(b);
+            }
+            buyablesFromOtherToThis.add(b);
+        }
+    
+        // All buyables are properly owned by supposed players, committing the changes.
+        for (Buyable b : buyablesFromOtherToThis) {
+            b.setOwner(this);
+        }
+        for (Buyable b : buyablesFromThisToOther) {
+            b.setOwner(otherPlayer);
+        }
+        this.pay(netBid, otherPlayer);
     }
     
     public void earn(int amount) {
@@ -311,12 +280,10 @@ public class Player implements GameEntity {
     public boolean equals(Object obj) {
         if (obj instanceof Player p) {
             return this.balance == p.balance &&
-                    (this.buyables == null ? p.buyables == null : this.buyables.equals(p.buyables)) &&
                     this.doubleRollStreak == p.doubleRollStreak &&
                     this.getGameId().equals(p.getGameId()) &&
                     this.name.equals(p.name) &&
                     this.position == p.position &&
-                    this.publicTransportsOwned == p.publicTransportsOwned &&
                     this.turnsInJailLeft == p.turnsInJailLeft;
         }
         return false;
@@ -325,6 +292,6 @@ public class Player implements GameEntity {
     public String toString() {
         return String.format("Player: gameId=%s, userId=%s, name=%s, position=%d, balance=%d, doubleRollStreak=%d, turnsInJailLeft=%d, publicTransportsOwned=%d, buyables=%s",
                 this.getGameId(), this.userId, this.name, this.position, this.balance, this.doubleRollStreak,
-                this.turnsInJailLeft, this.publicTransportsOwned, this.buyables);
+                this.turnsInJailLeft, this.numberOfPublicTransportsOwned(), this.buyables());
     }
 }
