@@ -1,7 +1,6 @@
 package types.gameplay;
 
 import types.gameplay.exceptions.TileOfTypeNotFoundException;
-import types.websocket.TradeOffer;
 
 import java.util.*;
 

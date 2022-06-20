@@ -1,12 +1,14 @@
-package types.websocket;
+package types.gameplay;
 
 import types.gameplay.Buyable;
 import types.gameplay.Player;
+import types.websocket.GameMessage;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-public class TradeOffer extends GameMessage {
+public class TradeOffer implements GameEntity{
     private Player sender;
     private Player receiver;
     private List<Buyable> buyablesIn;
@@ -14,7 +16,6 @@ public class TradeOffer extends GameMessage {
     private int netBid;
     
     public TradeOffer(Player sender, Player receiver) {
-        super(sender.getUserId(), sender.getGameId());
         this.sender = sender;
         this.receiver = receiver;
         this.buyablesIn = new ArrayList<>();
@@ -23,7 +24,6 @@ public class TradeOffer extends GameMessage {
     }
     
     public TradeOffer(Player sender, Player receiver, List<Buyable> buyablesIn, List<Buyable> buyablesOut, int netBid) {
-        super(sender.getUserId(), sender.getGameId());
         this.sender = sender;
         this.receiver = receiver;
         this.buyablesIn = buyablesIn;
@@ -72,5 +72,21 @@ public class TradeOffer extends GameMessage {
             }
         }
         return playersAreTogether && senderOwnsAllOfferedBuyables && receiverOwnsAllDemandedBuyables;
+    }
+    
+    @Override
+    public String getGameId() {
+        return this.sender.getGameId();
+    }
+    
+    public boolean equals(Object obj) {
+        if (obj instanceof TradeOffer o) {
+            return this.sender.is(o.sender) &&
+                    this.receiver.is(o.receiver) &&
+                    new HashSet<>(this.buyablesIn).equals(new HashSet<>(o.buyablesIn)) &&
+                    new HashSet<>(this.buyablesOut).equals(new HashSet<>(o.buyablesIn)) &&
+                    this.netBid == o.netBid;
+        }
+        return false;
     }
 }

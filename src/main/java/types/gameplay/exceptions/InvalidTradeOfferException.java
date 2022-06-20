@@ -1,6 +1,6 @@
 package types.gameplay.exceptions;
 
-import types.websocket.TradeOffer;
+import types.gameplay.TradeOffer;
 
 public class InvalidTradeOfferException extends GameplayException {
     public InvalidTradeOfferException(TradeOffer offer) {
