@@ -239,13 +239,13 @@ public class Player implements GameEntity {
         this.offerTrade(offer);
     }
     
-    public void acceptTradeOffer(TradeOffer offer) throws TileNotSellableException, TileNotBuyableException, InvalidTradeOfferException {
-        if (!offer.isValid() || !offer.getReceiver().is(this)) {
-            throw new InvalidTradeOfferException(offer);
+    public void acceptTradeOffer() throws TileNotSellableException, TileNotBuyableException, InvalidTradeOfferException {
+        if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().is(this)) {
+            throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
-        this.tradeWithPlayer(offer.getReceiver(), offer.getBuyablesIn(), offer.getBuyablesOut(), offer.getNetBid());
+        this.tradeWithPlayer(this.game.getCurrentOffer().getReceiver(), this.game.getCurrentOffer().getBuyablesIn(), this.game.getCurrentOffer().getBuyablesOut(), this.game.getCurrentOffer().getNetBid());
         this.game.setCurrentOffer(null);
-        this.game.setCurrentPlayer(offer.getSender());
+        this.game.setCurrentPlayer(this.game.getCurrentOffer().getSender());
         this.game.setPhase(GamePhase.trade);
     }
     
