@@ -310,6 +310,7 @@ public class Player implements GameEntity {
      * @param p The other <code>Tile</code> instance to be compared against this <code>Player</code> instance
      * @return Whether this and <code>p</code> are the same <code>Player</code>
      */
+    @JsonIgnore
     public boolean is(Player p) {
         return this.getGameId().equals(p.getGameId()) && Objects.equals(this.getUserId(), p.getUserId());
     }
