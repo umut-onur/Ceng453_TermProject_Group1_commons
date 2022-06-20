@@ -243,7 +243,7 @@ public class Player implements GameEntity {
         player.balance += amount;
     }
     
-    public void tradeWithPlayer(Player otherPlayer, List<Buyable> incomingBuyables, List<Buyable> outgoingBuyables, int netIncome)
+    public void tradeWithPlayer(Player otherPlayer, List<Buyable> incomingBuyables, List<Buyable> outgoingBuyables, int netBid)
             throws TileNotSellableException, TileNotBuyableException {
         List<Buyable> buyablesFromThisToOther = new ArrayList<>();
         List<Buyable> buyablesFromOtherToThis = new ArrayList<>();
@@ -269,7 +269,7 @@ public class Player implements GameEntity {
             // All buyables are properly owned by supposed players, committing the changes.
             this.buyables.addAll(buyablesFromOtherToThis);
             otherPlayer.buyables.addAll(buyablesFromThisToOther);
-            otherPlayer.pay(netIncome, this);
+            this.pay(netBid, otherPlayer);
             
         // Some buyable is not owned by its supposed player (or any other exception that prevents the transaction from
         // being carried out), reverting the changes and re-throwing the exception.
