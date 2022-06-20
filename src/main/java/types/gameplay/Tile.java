@@ -37,17 +37,41 @@ public interface Tile extends GameEntity {
     
     
     /**
-     * Sets the position (i.e. index) of this Tile.
-     * @param position The new positions of this tile. Must be in range [0, 15].
+     * Sets the position (i.e. index) of this <code>Tile</code>.
+     *
+     * @param position The new positions of this <code>Tile</code>. Must be in range [0, 15].
      */
     void setPosition(int position);
     
+    /**
+     * Handles the event that a player passes through this <code>Tile</code> while advancing on the board.
+     *
+     * @param player The player passing through this <code>Tile</code>
+     */
     void handlePlayerPassBy(Player player);
     
+    /**
+     * Handles the event that a player lands on this <code>Tile</code> after advancing on the board.
+     *
+     * @param player The player landing on this <code>Tile</code>
+     */
     void handlePlayerStepOn(Player player) throws TileOfTypeNotFoundException;
     
+    /**
+     * Handles the event when a player tries to buy this <code>Tile</code>.
+     *
+     * @param player The player trying to buy this <code>Tile</code>.
+     * @throws TileNotBuyableException if the <code>Tile</code> is not of type <code>Buyable</code>, or it is already owned
+     * @throws NotEnoughMoneyToBuyException if the player does not have enough money to buy this <code>Tile</code>
+     */
     void handlePlayerBuy(Player player) throws TileNotBuyableException, NotEnoughMoneyToBuyException;
     
+    /**
+     * Handles the event when a player tries to sell this <code>Tile</code>.
+     *
+     * @param player The player trying to sell this <code>Tile</code>.
+     * @throws TileNotSellableException if the <code>Tile</code> is not of type <code>Buyable</code>, or it is not owned by the player
+     */
     void handlePlayerSell(Player player) throws TileNotSellableException;
     
     @Override

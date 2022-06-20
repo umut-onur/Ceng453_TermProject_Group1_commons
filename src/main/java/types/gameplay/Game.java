@@ -58,72 +58,94 @@ public class Game implements GameService {
         this.finishedAt = finishedAt;
     }
 
+    // Getters
     @Override
     public String getId() {
         return id;
-    }
-    
-    public void setId(String id) {
-        this.id = id;
     }
     
     @Override
     public List<Player> getPlayers() {
         return players;
     }
-
-    public void setPlayers(List<Player> players) {
-        this.players = players;
-    }
-
+    
     @Override
     public int getNumberOfPlayers() {
         return this.players.size();
     }
-
+    
     @Override
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
     
-    public void setCurrentPlayer(Player currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-    
-    public GamePhase getPhase() {
-        return phase;
-    }
-    
-    public void setPhase(GamePhase phase) {
-        this.phase = phase;
+    @Override
+    public List<Tile> getBoard() {
+        return board;
     }
     
     @Override
     public Dice getDice() {
         return dice;
     }
-
+    
+    public GamePhase getPhase() {
+        return phase;
+    }
+    
     @Override
-    public List<Tile> getBoard() {
-        return board;
+    public Long getStartedAt() {
+        return startedAt;
+    }
+    
+    @Override
+    public Long getFinishedAt() {
+        return finishedAt;
+    }
+    
+    @Override
+    public GameStatus getStatus() {
+        if (this.startedAt == null) {
+            return GameStatus.hasNotStartedYet;
+        }
+        if (this.finishedAt == null) {
+            return GameStatus.goingOn;
+        }
+        return GameStatus.alreadyFinished;
+    }
+    
+    @Override
+    public Map<String, Integer> getResults() {
+        Map<String, Integer> gameResult = new HashMap<>();
+        for (Player p : this.players) {
+            gameResult.put(p.getName(), p.getScore());
+        }
+        return gameResult;
+    }
+    
+    // Setters
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
+    
+    public void setCurrentPlayer(Player currentPlayer) {
+        this.currentPlayer = currentPlayer;
+    }
+    
+    public void setPhase(GamePhase phase) {
+        this.phase = phase;
     }
 
     public void setBoard(List<Tile> board) {
         this.board = board;
     }
 
-    @Override
-    public Long getStartedAt() {
-        return startedAt;
-    }
-
     public void setStartedAt(Long startedAt) {
         this.startedAt = startedAt;
-    }
-
-    @Override
-    public Long getFinishedAt() {
-        return finishedAt;
     }
 
     public void setFinishedAt(Long finishedAt) {
@@ -223,25 +245,6 @@ public class Game implements GameService {
         this.finishedAt = System.currentTimeMillis() / 1000L;
     }
 
-    @Override
-    public Map<String, Integer> getResults() {
-        Map<String, Integer> gameResult = new HashMap<>();
-        for (Player p : this.players) {
-            gameResult.put(p.getName(), p.getScore());
-        }
-        return gameResult;
-    }
-
-    @Override
-    public GameStatus getStatus() {
-        if (this.startedAt == null) {
-            return GameStatus.hasNotStartedYet;
-        }
-        if (this.finishedAt == null) {
-            return GameStatus.goingOn;
-        }
-        return GameStatus.alreadyFinished;
-    }
     
     public boolean is(Object obj) {
         if (obj instanceof Game g) {
