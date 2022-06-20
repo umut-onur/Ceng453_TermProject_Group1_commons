@@ -52,7 +52,7 @@ public class PublicTransport implements Buyable {
     
     @Override
     public int getRent() {
-        return (this.owner != null) ? (firstCost / 10) * this.owner.getPublicTransportsOwned() : (firstCost / 10);
+        return (this.owner != null) ? (firstCost / 10) * this.owner.numberOfPublicTransportsOwned() : (firstCost / 10);
     }
     
     @Override
@@ -74,14 +74,12 @@ public class PublicTransport implements Buyable {
             throw new NotEnoughMoneyToBuyException(player, this);
         }
         player.pay(this.getFirstCost());
-        player.acquirePublicTransport(this);
         this.owner = player;
     }
     
     @Override
     public void handlePlayerSell(Player player) {
         player.earn(this.getFirstCost());
-        player.releasePublicTransport(this);
         this.owner = null;
     }
     

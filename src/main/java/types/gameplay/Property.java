@@ -72,7 +72,6 @@ public class Property implements Buyable {
             throw new NotEnoughMoneyToBuyException(player, this);
         }
         player.pay(this.getFirstCost());
-        player.acquireProperty(this);
         this.owner = player;
     }
     
@@ -82,7 +81,6 @@ public class Property implements Buyable {
             throw new TileNotSellableException(this);
         }
         player.earn(this.getFirstCost());
-        player.releaseProperty(this);
         this.owner = null;
     }
     
