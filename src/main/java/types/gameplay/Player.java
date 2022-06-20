@@ -98,7 +98,8 @@ public class Player implements GameEntity {
     public int getTurnsInJailLeft() {
         return turnsInJailLeft;
     }
-    
+
+    @JsonIgnore
     public boolean isOnUnownedBuyable() {
         return this.game.getBoard().get(this.getPosition()).canBeBought();
     }
