@@ -128,7 +128,7 @@ public class Player implements GameEntity {
     }
     
     public boolean ownsBuyable(Buyable buyable) {
-        return buyable.getOwner().is(this);
+        return buyable.getOwner() != null && this.is(buyable.getOwner());
     }
 
     public int getPosition() {
