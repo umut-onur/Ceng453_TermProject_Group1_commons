@@ -230,6 +230,7 @@ public class Player implements GameEntity {
             throw new InvalidTradeOfferException(offer);
         }
         this.game.setCurrentOffer(offer);
+        this.game.setCurrentPlayer(offer.getReceiver());
         this.game.setPhase(GamePhase.reply);
     }
     
@@ -244,6 +245,7 @@ public class Player implements GameEntity {
         }
         this.tradeWithPlayer(offer.getReceiver(), offer.getBuyablesIn(), offer.getBuyablesOut(), offer.getNetBid());
         this.game.setCurrentOffer(null);
+        this.game.setCurrentPlayer(offer.getSender());
         this.game.setPhase(GamePhase.trade);
     }
     
@@ -252,6 +254,7 @@ public class Player implements GameEntity {
             throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
         this.game.setCurrentOffer(null);
+        this.game.setCurrentPlayer(this.game.getCurrentOffer().getSender());
         this.game.setPhase(GamePhase.trade);
     }
     
