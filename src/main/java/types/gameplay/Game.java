@@ -1,6 +1,7 @@
 package types.gameplay;
 
 import types.gameplay.exceptions.TileOfTypeNotFoundException;
+import types.websocket.TradeOffer;
 
 import java.util.*;
 
@@ -10,6 +11,7 @@ public class Game implements GameService {
     private Player currentPlayer;
     private GamePhase phase;
     private final Dice dice;
+    private TradeOffer currentOffer;
     private List<Tile> board;
     private Long startedAt;
     private Long finishedAt;
@@ -21,6 +23,7 @@ public class Game implements GameService {
         this.currentPlayer = null;
         this.phase = null;
         this.dice = new Dice(this);
+        this.currentOffer = null;
         this.startedAt = null;
         this.finishedAt = null;
     }
@@ -32,6 +35,7 @@ public class Game implements GameService {
         this.currentPlayer = null;
         this.phase = null;
         this.dice = new Dice(this);
+        this.currentOffer = null;
         this.startedAt = null;
         this.finishedAt = null;
     }
@@ -43,6 +47,7 @@ public class Game implements GameService {
         this.currentPlayer = null;
         this.phase = null;
         this.dice = new Dice(this);
+        this.currentOffer = null;
         this.startedAt = null;
         this.finishedAt = null;
     }
@@ -54,6 +59,7 @@ public class Game implements GameService {
         this.currentPlayer = null;
         this.phase = null;
         this.dice = new Dice(this);
+        this.currentOffer = null;
         this.startedAt = startedAt;
         this.finishedAt = finishedAt;
     }
@@ -87,6 +93,11 @@ public class Game implements GameService {
     @Override
     public Dice getDice() {
         return dice;
+    }
+    
+    @Override
+    public TradeOffer getCurrentOffer() {
+        return this.currentOffer;
     }
     
     public GamePhase getPhase() {
@@ -143,7 +154,11 @@ public class Game implements GameService {
     public void setBoard(List<Tile> board) {
         this.board = board;
     }
-
+    
+    public void setCurrentOffer(TradeOffer currentOffer) {
+        this.currentOffer = currentOffer;
+    }
+    
     public void setStartedAt(Long startedAt) {
         this.startedAt = startedAt;
     }

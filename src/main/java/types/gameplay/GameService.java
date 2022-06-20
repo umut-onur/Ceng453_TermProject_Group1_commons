@@ -1,5 +1,7 @@
 package types.gameplay;
 
+import types.websocket.TradeOffer;
+
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +18,8 @@ public interface GameService {
     Dice getDice();
     
     List<Tile> getBoard();
+    
+    TradeOffer getCurrentOffer();
     
     Long getStartedAt();
     

@@ -3,6 +3,7 @@ package types.gameplay;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import types.auth.User;
 import types.gameplay.exceptions.*;
+import types.websocket.TradeOffer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -222,6 +223,32 @@ public class Player implements GameEntity {
     public void pay(int amount, Player player) {
         this.balance -= amount;
         player.balance += amount;
+    }
+    
+    public void offerTrade(Player otherPlayer, List<Buyable> incomingBuyables, List<Buyable> outgoingBuyables, int netBid) throws InvalidTradeOfferException {
+        TradeOffer offer = new TradeOffer(this, otherPlayer,incomingBuyables, outgoingBuyables, netBid);
+        if (!offer.isValid()) {
+            throw new InvalidTradeOfferException(offer);
+        }
+        this.game.setCurrentOffer(offer);
+        this.game.setPhase(GamePhase.reply);
+    }
+    
+    public void acceptTradeOffer(TradeOffer offer) throws TileNotSellableException, TileNotBuyableException, InvalidTradeOfferException {
+        if (!offer.isValid() || !offer.getReceiver().is(this)) {
+            throw new InvalidTradeOfferException(offer);
+        }
+        this.tradeWithPlayer(offer.getReceiver(), offer.getBuyablesIn(), offer.getBuyablesOut(), offer.getNetBid());
+        this.game.setCurrentOffer(null);
+        this.game.setPhase(GamePhase.trade);
+    }
+    
+    public void rejectTradeOffer() throws InvalidTradeOfferException {
+        if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().is(this)) {
+            throw new InvalidTradeOfferException(this.game.getCurrentOffer());
+        }
+        this.game.setCurrentOffer(null);
+        this.game.setPhase(GamePhase.trade);
     }
     
     public void tradeWithPlayer(Player otherPlayer, List<Buyable> incomingBuyables, List<Buyable> outgoingBuyables, int netBid)

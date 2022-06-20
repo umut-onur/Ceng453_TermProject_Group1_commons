@@ -28,7 +28,7 @@ public class TradeOffer extends GameMessage {
         this.receiver = receiver;
         this.buyablesIn = buyablesIn;
         this.buyablesOut = buyablesOut;
-        this. netBid = netBid;
+        this.netBid = netBid;
     }
     
     public Player getSender() {
