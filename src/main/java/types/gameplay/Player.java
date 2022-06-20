@@ -3,6 +3,7 @@ package types.gameplay;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import types.auth.User;
 import types.gameplay.exceptions.*;
+import types.websocket.TradeOfferMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -224,13 +225,17 @@ public class Player implements GameEntity {
         player.balance += amount;
     }
     
-    public void offerTrade(Player otherPlayer, List<Buyable> incomingBuyables, List<Buyable> outgoingBuyables, int netBid) throws InvalidTradeOfferException {
-        TradeOffer offer = new TradeOffer(this, otherPlayer,incomingBuyables, outgoingBuyables, netBid);
+    public void offerTrade(TradeOffer offer) throws InvalidTradeOfferException {
         if (!offer.isValid()) {
             throw new InvalidTradeOfferException(offer);
         }
         this.game.setCurrentOffer(offer);
         this.game.setPhase(GamePhase.reply);
+    }
+    
+    public void offerTrade(Player otherPlayer, List<Buyable> incomingBuyables, List<Buyable> outgoingBuyables, int netBid) throws InvalidTradeOfferException {
+        TradeOffer offer = new TradeOffer(this, otherPlayer,incomingBuyables, outgoingBuyables, netBid);
+        this.offerTrade(offer);
     }
     
     public void acceptTradeOffer(TradeOffer offer) throws TileNotSellableException, TileNotBuyableException, InvalidTradeOfferException {
