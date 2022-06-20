@@ -117,6 +117,10 @@ public class Player implements GameEntity {
     public void setBuyables(List<Buyable> buyables) {
         this.buyables = buyables;
     }
+    
+    public boolean ownsBuyable(Buyable buyable) {
+        return buyable.getOwner().is(this);
+    }
 
     public int getPublicTransportsOwned() {
         return publicTransportsOwned;
@@ -252,14 +256,14 @@ public class Player implements GameEntity {
         // each other's buyables in the end.
         try {
             for (Buyable b : outgoingBuyables) {
-                if (!this.buyables.contains(b)) {
+                if (!b.getOwner().is(this)) {
                     throw new TileNotSellableException(b);
                 }
                 buyablesFromThisToOther.add(b);
                 this.buyables.remove(b);
             }
             for (Buyable b : incomingBuyables) {
-                if (!otherPlayer.buyables.contains(b)) {
+                if (!b.getOwner().is(otherPlayer)) {
                     throw new TileNotBuyableException(b);
                 }
                 buyablesFromOtherToThis.add(b);
@@ -267,6 +271,7 @@ public class Player implements GameEntity {
             }
             
             // All buyables are properly owned by supposed players, committing the changes.
+            // TODO: Change the owner of each buyable
             this.buyables.addAll(buyablesFromOtherToThis);
             otherPlayer.buyables.addAll(buyablesFromThisToOther);
             this.pay(netBid, otherPlayer);
