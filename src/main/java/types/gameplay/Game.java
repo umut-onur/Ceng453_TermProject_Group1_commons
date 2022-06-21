@@ -10,6 +10,7 @@ import java.util.*;
 public class Game implements GameService {
     private String id;
     private List<Player> players;
+    private Player hostPlayer;
     private Player currentPlayer;
     private GamePhase phase;
     private final Dice dice;
@@ -84,7 +85,13 @@ public class Game implements GameService {
     public int getNumberOfPlayers() {
         return this.players.size();
     }
-
+    
+    @JsonGetter
+    @Override
+    public Player getHostPlayer() {
+        return hostPlayer;
+    }
+    
     @JsonGetter
     @Override
     public Player getCurrentPlayer() {
@@ -162,6 +169,11 @@ public class Game implements GameService {
     @JsonSetter
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
+    }
+    
+    @JsonSetter
+    public void setHostPlayer(Player hostPlayer) {
+        this.hostPlayer = hostPlayer;
     }
 
     @JsonSetter
