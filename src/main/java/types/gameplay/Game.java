@@ -1,5 +1,8 @@
 package types.gameplay;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import types.gameplay.exceptions.TileOfTypeNotFoundException;
 
 import java.util.*;
@@ -64,55 +67,66 @@ public class Game implements GameService {
     }
 
     // Getters
+    @JsonGetter
     @Override
     public String getId() {
         return id;
     }
-    
+
+    @JsonGetter
     @Override
     public List<Player> getPlayers() {
         return players;
     }
-    
+
+    @JsonIgnore
     @Override
     public int getNumberOfPlayers() {
         return this.players.size();
     }
-    
+
+    @JsonGetter
     @Override
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
-    
+
+    @JsonGetter
     @Override
     public List<Tile> getBoard() {
         return board;
     }
-    
+
+    @JsonGetter
     @Override
     public Dice getDice() {
         return dice;
     }
-    
+
+    @JsonGetter
     @Override
     public TradeOffer getCurrentOffer() {
         return this.currentOffer;
     }
-    
+
+    @JsonGetter
     public GamePhase getPhase() {
         return phase;
     }
-    
+
+    @JsonGetter
     @Override
     public Long getStartedAt() {
         return startedAt;
     }
-    
+
+    @JsonGetter
     @Override
     public Long getFinishedAt() {
         return finishedAt;
     }
-    
+
+    @JsonIgnore
     @Override
     public GameStatus getStatus() {
         if (this.startedAt == null) {
@@ -123,7 +137,8 @@ public class Game implements GameService {
         }
         return GameStatus.alreadyFinished;
     }
-    
+
+    @JsonIgnore
     @Override
     public Map<String, Integer> getResults() {
         Map<String, Integer> gameResult = new HashMap<>();
@@ -134,48 +149,59 @@ public class Game implements GameService {
     }
     
     // Setters
+    @JsonSetter
     public void setId(String id) {
         this.id = id;
     }
-    
+
+    @JsonSetter
     public void setPlayers(List<Player> players) {
         this.players = players;
     }
-    
+
+    @JsonSetter
     public void setCurrentPlayer(Player currentPlayer) {
         this.currentPlayer = currentPlayer;
     }
-    
+
+    @JsonSetter
     public void setPhase(GamePhase phase) {
         this.phase = phase;
     }
 
+    @JsonSetter
     public void setBoard(List<Tile> board) {
         this.board = board;
     }
-    
+
+    @JsonSetter
     public void setCurrentOffer(TradeOffer currentOffer) {
         this.currentOffer = currentOffer;
     }
-    
+
+    @JsonSetter
     public void setStartedAt(Long startedAt) {
         this.startedAt = startedAt;
     }
 
+    @JsonSetter
     public void setFinishedAt(Long finishedAt) {
         this.finishedAt = finishedAt;
     }
 
+    @JsonIgnore
     @Override
     public void addPlayer(Player player) {
         this.players.add(player);
     }
 
+    @JsonIgnore
     @Override
     public void removePlayer(Player player) {
         this.players.remove(player);
     }
-    
+
+    @JsonIgnore
     public Player playerOfUser(String userId) {
         for (Player p : this.players) {
             if (Objects.equals(p.getUserId(), userId)) {
@@ -185,6 +211,7 @@ public class Game implements GameService {
         return null;
     }
 
+    @JsonIgnore
     private void initializeBoard() {
         List<Property> properties = new ArrayList<Property>();
         List<PublicTransport> publicTransports = new ArrayList<PublicTransport>();
@@ -211,6 +238,7 @@ public class Game implements GameService {
         }
     }
 
+    @JsonIgnore
     @Override
     public void start() {
         this.initializeBoard();
@@ -225,6 +253,7 @@ public class Game implements GameService {
         this.startedAt = System.currentTimeMillis() / 1000L;
     }
 
+    @JsonIgnore
     void passTurnToNextPlayer() {
         if (!currentPlayer.willRepeatTurn()) {
             this.currentPlayer = (this.currentPlayer == this.players.get(this.players.size() - 1))
@@ -236,7 +265,8 @@ public class Game implements GameService {
             this.passTurnToNextPlayer();
         }
     }
-    
+
+    @JsonIgnore
     public int findFirstTileOfType(TileType type) throws TileOfTypeNotFoundException {
         for (Tile t : this.board) {
             if (t.getType() == type) {
@@ -246,6 +276,7 @@ public class Game implements GameService {
         throw new TileOfTypeNotFoundException(type);
     }
 
+    @JsonIgnore
     public boolean shouldEnd() {
         for (Player p : this.players) {
             if (p.getBalance() < 0) {
@@ -255,11 +286,12 @@ public class Game implements GameService {
         return false;
     }
 
+    @JsonIgnore
     public void finish() {
         this.finishedAt = System.currentTimeMillis() / 1000L;
     }
 
-    
+    @JsonIgnore
     public boolean is(Object obj) {
         if (obj instanceof Game g) {
             return this.id.equals(g.id);
