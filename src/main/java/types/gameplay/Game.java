@@ -9,8 +9,8 @@ import java.util.*;
 
 public class Game implements GameService {
     private String id;
+    private String hostUserId;
     private List<Player> players;
-    private Player hostPlayer;
     private Player currentPlayer;
     private GamePhase phase;
     private final Dice dice;
@@ -21,6 +21,7 @@ public class Game implements GameService {
 
     public Game() {
         this.id = null;
+        this.hostUserId = null;
         this.players = new ArrayList<Player>();
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
@@ -31,20 +32,9 @@ public class Game implements GameService {
         this.finishedAt = null;
     }
 
-    public Game(String gameId, List<Player> players) {
+    public Game(String gameId, String hostUserId) {
         this.id = gameId;
-        this.players = players;
-        this.board = new ArrayList<Tile>();
-        this.currentPlayer = null;
-        this.phase = null;
-        this.dice = new Dice(this);
-        this.currentOffer = null;
-        this.startedAt = null;
-        this.finishedAt = null;
-    }
-
-    public Game(String gameId) {
-        this.id = gameId;
+        this.hostUserId = hostUserId;
         this.players = new ArrayList<Player>();
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
@@ -55,8 +45,9 @@ public class Game implements GameService {
         this.finishedAt = null;
     }
 
-    public Game(String gameId, Long startedAt, Long finishedAt) {
+    public Game(String gameId, String hostUserId, Long startedAt, Long finishedAt) {
         this.id = gameId;
+        this.hostUserId = hostUserId;
         this.players = new ArrayList<Player>();
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
@@ -88,8 +79,8 @@ public class Game implements GameService {
     
     @JsonGetter
     @Override
-    public Player getHostPlayer() {
-        return hostPlayer;
+    public String getHostUserId() {
+        return this.hostUserId;
     }
     
     @JsonGetter
@@ -172,8 +163,8 @@ public class Game implements GameService {
     }
     
     @JsonSetter
-    public void setHostPlayer(Player hostPlayer) {
-        this.hostPlayer = hostPlayer;
+    public void setHostUserId(String hostUserId) {
+        this.hostUserId = hostUserId;
     }
 
     @JsonSetter

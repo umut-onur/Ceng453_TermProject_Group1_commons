@@ -1,7 +1,5 @@
 package types.gameplay;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +11,7 @@ public interface GameService {
     
     int getNumberOfPlayers();
     
-    @JsonIgnore
-    Player getHostPlayer();
+    String getHostUserId();
     
     Player getCurrentPlayer();
     
