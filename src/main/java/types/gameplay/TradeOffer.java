@@ -11,6 +11,7 @@ import types.websocket.TradeOfferMessage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 
 public class TradeOffer implements GameEntity{
     private Player sender;
@@ -94,7 +95,7 @@ public class TradeOffer implements GameEntity{
     
     @JsonIgnore
     public boolean isValid() {
-        boolean playersAreTogether = this.sender.getGameId().equals(this.receiver.getGameId());
+        boolean playersAreTogether = Objects.equals(this.sender.getGameId(), this.receiver.getGameId());
         boolean senderOwnsAllOfferedBuyables = true;
         for (Buyable b : this.buyablesOut) {
             if (!this.sender.ownsBuyable(b)) {
