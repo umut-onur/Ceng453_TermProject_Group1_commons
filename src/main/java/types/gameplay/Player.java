@@ -79,7 +79,7 @@ public class Player implements GameEntity {
     @JsonIgnore
     @Override
     public String getGameId() {
-        return game.getId();
+        return this.game != null ? game.getId() : null;
     }
 
     @JsonGetter
@@ -119,11 +119,17 @@ public class Player implements GameEntity {
 
     @JsonIgnore
     public boolean isOnUnownedBuyable() {
+        if (this.game == null) {
+            return false;
+        }
         return this.game.getBoard().get(this.getPosition()).canBeBought();
     }
 
     @JsonIgnore
     public List<Buyable> buyables() {
+        if (this.game == null) {
+            return new ArrayList<>();
+        }
         List<Buyable> buyables = new ArrayList<>();
         for (Tile t : this.game.getBoard()) {
             if (t.getType().equals(TileType.PROPERTY) || t.getType().equals(TileType.PUBLIC_TRANSPORT)) {
