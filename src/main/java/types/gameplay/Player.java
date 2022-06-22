@@ -406,6 +406,11 @@ public class Player implements GameEntity {
     public boolean is(Player p) {
         return Objects.equals(this.getGameId(), p.getGameId()) && Objects.equals(this.getUserId(), p.getUserId());
     }
+    
+    @JsonIgnore
+    public boolean isOfSameUser(Player p) {
+        return Objects.equals(this.getUserId(), p.getUserId());
+    }
 
     public boolean equals(Object obj) {
         if (obj instanceof Player p) {
