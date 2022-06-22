@@ -1,5 +1,6 @@
 package types.gameplay;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import types.gameplay.exceptions.TileNotBuyableException;
 import types.gameplay.exceptions.TileNotSellableException;
@@ -20,9 +21,10 @@ public class StartingPoint implements Tile {
         this.passingReward = 100;
     }
     
+    @JsonIgnore
     @Override
     public String getGameId() {
-        return game.getId();
+        return this.game != null ? game.getId() : null;
     }
     
     @Override
