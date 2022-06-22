@@ -80,4 +80,10 @@ public class IncomeTax implements Tile {
     public TileType getType() {
         return TileType.INCOME_TAX;
     }
+    
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "'" + this.name + "' (-" + this.taxAmount + "$)";
+    }
 }

@@ -109,4 +109,10 @@ public class PublicTransport implements Buyable {
     public TileType getType() {
         return TileType.PUBLIC_TRANSPORT;
     }
+    
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "'" + this.name + "' (" + this.firstCost + "$)";
+    }
 }

@@ -62,4 +62,11 @@ public class Dice implements GameEntity {
     public boolean isDoubleDice() {
         return (dieOne != 0 && dieTwo != 0) && dieOne == dieTwo;
     }
+    
+    
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "D[" + this.dieOne + ", " + this.dieTwo + "]";
+    }
 }

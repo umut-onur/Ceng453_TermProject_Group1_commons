@@ -68,4 +68,10 @@ public class GoToJail implements Tile {
     public TileType getType() {
         return TileType.GO_TO_JAIL;
     }
+    
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "'" + this.name + "' (2 Turns)";
+    }
 }

@@ -65,4 +65,10 @@ public class JustVisiting implements Tile {
     public TileType getType() {
         return TileType.JUST_VISITING;
     }
+    
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "'" + this.name + "'";
+    }
 }

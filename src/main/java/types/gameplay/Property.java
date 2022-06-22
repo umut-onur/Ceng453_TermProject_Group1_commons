@@ -115,4 +115,10 @@ public class Property implements Buyable {
     public TileType getType() {
         return TileType.PROPERTY;
     }
+    
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "'" + this.name + "' (" + this.firstCost + "$)";
+    }
 }

@@ -73,4 +73,10 @@ public class StartingPoint implements Tile {
     public TileType getType() {
         return TileType.STARTING_POINT;
     }
+    
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "'" + this.name + "' (+" + this.passingReward + "$)";
+    }
 }
