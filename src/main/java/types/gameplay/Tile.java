@@ -81,7 +81,7 @@ public interface Tile extends GameEntity {
      * @return Whether this and <code>t</code> are the same <code>Tile</code>
      */
     default boolean is(Tile t) {
-        return t != null && this.getGameId().equals(t.getGameId()) && this.getPosition() == t.getPosition();
+        return t != null && Objects.equals(this.getGameId(), t.getGameId()) && this.getPosition() == t.getPosition();
     }
 
     /**

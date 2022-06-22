@@ -291,7 +291,7 @@ public class Game implements GameService {
     @JsonIgnore
     public boolean is(Object obj) {
         if (obj instanceof Game g) {
-            return this.id.equals(g.id);
+            return Objects.equals(this.id, g.id);
         }
         return false;
     }
@@ -299,9 +299,9 @@ public class Game implements GameService {
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Game g) {
-            return this.id.equals(g.id) &&
+            return Objects.equals(this.id, g.id) &&
                     this.board.equals(g.board) &&
-                    (this.currentPlayer == null ? g.currentPlayer == null : this.currentPlayer.equals(g.currentPlayer)) &&
+                    (this.currentPlayer == null ? g.currentPlayer == null : this.currentPlayer.is(g.currentPlayer)) &&
                     (this.finishedAt == null ? g.finishedAt == null : this.finishedAt.equals(g.finishedAt)) &&
                     (this.startedAt == null ? g.startedAt == null : this.startedAt.equals(g.startedAt));
         }

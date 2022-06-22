@@ -404,7 +404,7 @@ public class Player implements GameEntity {
      */
     @JsonIgnore
     public boolean is(Player p) {
-        return this.getGameId().equals(p.getGameId()) && Objects.equals(this.getUserId(), p.getUserId());
+        return Objects.equals(this.getGameId(), p.getGameId()) && Objects.equals(this.getUserId(), p.getUserId());
     }
 
     public boolean equals(Object obj) {
@@ -412,7 +412,7 @@ public class Player implements GameEntity {
             return this.balance == p.balance &&
                     this.doubleRollStreak == p.doubleRollStreak &&
                     Objects.equals(this.getGameId(), p.getGameId()) &&
-                    this.name.equals(p.name) &&
+                    Objects.equals(this.name, p.name) &&
                     this.position == p.position &&
                     this.turnsInJailLeft == p.turnsInJailLeft;
         }
