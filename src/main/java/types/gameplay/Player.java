@@ -405,7 +405,7 @@ public class Player implements GameEntity {
         if (obj instanceof Player p) {
             return this.balance == p.balance &&
                     this.doubleRollStreak == p.doubleRollStreak &&
-                    this.getGameId().equals(p.getGameId()) &&
+                    Objects.equals(this.getGameId(), p.getGameId()) &&
                     this.name.equals(p.name) &&
                     this.position == p.position &&
                     this.turnsInJailLeft == p.turnsInJailLeft;
