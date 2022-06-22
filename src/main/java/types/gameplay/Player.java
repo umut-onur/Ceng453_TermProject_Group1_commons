@@ -372,6 +372,24 @@ public class Player implements GameEntity {
         this.game.setPhase(GamePhase.roll);
     }
     
+    @JsonIgnore
+    public void sellAll() throws TileNotSellableException {
+        for (Buyable b : this.buyables()) {
+            b.handlePlayerSell(this);
+        }
+    }
+    
+    @JsonIgnore
+    public void giveAll() throws TileNotSellableException {
+        this.sellAll();
+        this.pay(this.getBalance());
+    }
+    
+    @JsonIgnore
+    public void abandonGame() throws TileNotSellableException {
+        this.giveAll();
+    }
+    
     /**
      * Returns whether this <code>Player</code> is the same <code>Player</code> as <code>p</code>.
      *
