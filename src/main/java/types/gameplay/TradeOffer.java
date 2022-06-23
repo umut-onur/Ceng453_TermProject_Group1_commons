@@ -105,7 +105,7 @@ public class TradeOffer implements GameEntity{
         }
         boolean receiverOwnsAllDemandedBuyables = true;
         for (Buyable b : this.buyablesIn) {
-            if (!this.sender.ownsBuyable(b)) {
+            if (!this.receiver.ownsBuyable(b)) {
                 receiverOwnsAllDemandedBuyables = false;
                 break;
             }
