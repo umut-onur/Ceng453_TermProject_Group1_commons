@@ -18,9 +18,9 @@ public class Dice implements GameEntity {
         this.dieTwo = dieTwo;
     }
 
-    public Dice(Game game) {
+    public Dice(Game game, String gameId) {
         this.game = game;
-        this.gameId = game.getId();
+        this.gameId = gameId;
         this.dieOne = 0;
         this.dieTwo = 0;
     }

@@ -26,7 +26,7 @@ public class Game implements GameService {
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
         this.phase = null;
-        this.dice = new Dice(this);
+        this.dice = new Dice(this, this.getId());
         this.currentOffer = null;
         this.startedAt = null;
         this.finishedAt = null;
@@ -39,7 +39,7 @@ public class Game implements GameService {
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
         this.phase = null;
-        this.dice = new Dice(this);
+        this.dice = new Dice(this, this.getId());
         this.currentOffer = null;
         this.startedAt = null;
         this.finishedAt = null;
@@ -52,7 +52,7 @@ public class Game implements GameService {
         this.board = new ArrayList<Tile>();
         this.currentPlayer = null;
         this.phase = null;
-        this.dice = new Dice(this);
+        this.dice = new Dice(this, this.getId());
         this.currentOffer = null;
         this.startedAt = startedAt;
         this.finishedAt = finishedAt;
