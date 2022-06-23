@@ -19,7 +19,10 @@ public class Dice implements GameEntity {
     }
 
     public Dice(Game game) {
-        this(game, 0, 0);
+        this.game = game;
+        this.gameId = game.getId();
+        this.dieOne = 0;
+        this.dieTwo = 0;
     }
 
     @JsonGetter
