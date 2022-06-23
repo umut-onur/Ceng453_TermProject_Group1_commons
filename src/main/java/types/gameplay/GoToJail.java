@@ -10,6 +10,7 @@ import types.gameplay.exceptions.TileOfTypeNotFoundException;
 @JsonTypeName("GoToJail")
 public class GoToJail implements Tile {
     private Game game;
+    private String gameId;
     private String name;
     private int position;
     
@@ -17,6 +18,7 @@ public class GoToJail implements Tile {
     
     public GoToJail(Game game) {
         this.game = game;
+        this.gameId = game.getId();
         this.name = "Go to Jail";
         this.position = 4;
     }
@@ -24,7 +26,7 @@ public class GoToJail implements Tile {
     @JsonGetter
     @Override
     public String getGameId() {
-        return this.game != null ? game.getId() : null;
+        return this.gameId;
     }
     
     @Override

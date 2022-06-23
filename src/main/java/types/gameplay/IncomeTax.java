@@ -9,6 +9,7 @@ import types.gameplay.exceptions.TileNotSellableException;
 @JsonTypeName("IncomeTax")
 public class IncomeTax implements Tile {
     private Game game;
+    private String gameId;
     private String name;
     private int position;
     private int taxAmount;
@@ -17,6 +18,7 @@ public class IncomeTax implements Tile {
     
     public IncomeTax(Game game, int position) {
         this.game = game;
+        this.gameId = game.getId();
         this.name = "Income Tax";
         this.position = position;
         this.taxAmount = 50;
@@ -24,6 +26,7 @@ public class IncomeTax implements Tile {
     
     public IncomeTax(Game game) {
         this.game = game;
+        this.gameId = game.getId();
         this.name = "Income Tax";
         this.position = -99;
         this.taxAmount = 50;
@@ -32,7 +35,7 @@ public class IncomeTax implements Tile {
     @JsonGetter
     @Override
     public String getGameId() {
-        return this.game != null ? game.getId() : null;
+        return this.gameId;
     }
     
     @Override

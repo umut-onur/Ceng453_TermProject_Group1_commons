@@ -9,6 +9,7 @@ import types.gameplay.exceptions.TileNotSellableException;
 @JsonTypeName("StartingPoint")
 public class StartingPoint implements Tile {
     private Game game;
+    private String gameId;
     private String name;
     private int position;
     private int passingReward;
@@ -17,6 +18,7 @@ public class StartingPoint implements Tile {
     
     public StartingPoint(Game game) {
         this.game = game;
+        this.gameId = game.getId();
         this.name = "Starting Point";
         this.position = 0;
         this.passingReward = 100;
@@ -25,7 +27,7 @@ public class StartingPoint implements Tile {
     @JsonGetter
     @Override
     public String getGameId() {
-        return this.game != null ? game.getId() : null;
+        return this.gameId;
     }
     
     @Override

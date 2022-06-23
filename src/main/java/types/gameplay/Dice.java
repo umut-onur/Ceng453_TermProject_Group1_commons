@@ -6,12 +6,14 @@ import java.util.Random;
 
 public class Dice implements GameEntity {
     private Game game;
+    private String gameId;
     private int dieOne;
     private int dieTwo;
 
     @JsonCreator
     public Dice(@JsonProperty("game") Game game, @JsonProperty("dieOne") Integer dieOne, @JsonProperty("dieTwo") Integer dieTwo) {
         this.game = game;
+        this.gameId = game.getId();
         this.dieOne = dieOne;
         this.dieTwo = dieTwo;
     }
@@ -23,7 +25,7 @@ public class Dice implements GameEntity {
     @JsonGetter
     @Override
     public String getGameId() {
-        return this.game.getId();
+        return this.gameId;
     }
 
     @JsonIgnore

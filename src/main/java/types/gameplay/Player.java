@@ -12,6 +12,7 @@ import java.util.Objects;
 
 public class Player implements GameEntity {
     private Game game;
+    private String gameId;
     private String userId;
     private String name;
     private int balance;
@@ -22,6 +23,7 @@ public class Player implements GameEntity {
     
     public Player() {
         this.game = null;
+        this.gameId = null;
         this.userId = null;
         this.name = null;
         this.balance = 1500;
@@ -33,6 +35,7 @@ public class Player implements GameEntity {
 
     public Player(Game game, String userId, String name) {
         this.game = game;
+        this.gameId = game.getId();
         this.userId = userId;
         this.name = name;
         this.balance = 1500;
@@ -44,6 +47,7 @@ public class Player implements GameEntity {
 
     public Player(Game game, String name) {
         this.game = game;
+        this.gameId = game.getId();
         this.userId = null;
         this.name = name;
         this.balance = 1500;
@@ -55,6 +59,7 @@ public class Player implements GameEntity {
 
     public Player(Game game, User user) {
         this.game = game;
+        this.gameId = game.getId();
         this.userId = user.getId();
         this.name = user.getUsername();
         this.balance = 1500;
@@ -66,6 +71,7 @@ public class Player implements GameEntity {
 
     public Player(Game game, User user, String name) {
         this.game = game;
+        this.gameId = game.getId();
         this.userId = user.getId();
         this.name = name;
         this.balance = 1500;
@@ -78,7 +84,7 @@ public class Player implements GameEntity {
     @JsonGetter
     @Override
     public String getGameId() {
-        return this.game != null ? game.getId() : null;
+        return this.gameId;
     }
 
     @JsonGetter

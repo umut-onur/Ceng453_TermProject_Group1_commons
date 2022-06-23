@@ -12,6 +12,7 @@ import java.io.NotActiveException;
 @JsonTypeName("Property")
 public class Property implements Buyable {
     private Game game;
+    private String gameId;
     private String name;
     private int firstCost;
     private Player owner;
@@ -21,6 +22,7 @@ public class Property implements Buyable {
     
     public Property(Game game, String name, int firstCost, int position) {
         this.game = game;
+        this.gameId = game.getId();
         this.name = name;
         this.firstCost = firstCost;
         this.owner = null;
@@ -29,6 +31,7 @@ public class Property implements Buyable {
     
     public Property(Game game, String name, int firstCost) {
         this.game = game;
+        this.gameId = game.getId();
         this.name = name;
         this.firstCost = firstCost;
         this.owner = null;
@@ -38,7 +41,7 @@ public class Property implements Buyable {
     @JsonGetter
     @Override
     public String getGameId() {
-        return this.game != null ? game.getId() : null;
+        return this.gameId;
     }
     
     @Override

@@ -9,6 +9,7 @@ import types.gameplay.exceptions.TileNotBuyableException;
 @JsonTypeName("PublicTransport")
 public class PublicTransport implements Buyable {
     private Game game;
+    private String gameId;
     private String name;
     private int firstCost;
     private Player owner;
@@ -18,6 +19,7 @@ public class PublicTransport implements Buyable {
 
     public PublicTransport(Game game, String name, int firstCost, int position) {
         this.game = game;
+        this.gameId = game.getId();
         this.name = name;
         this.firstCost = firstCost;
         this.owner = null;
@@ -26,6 +28,7 @@ public class PublicTransport implements Buyable {
     
     public PublicTransport(Game game, String name, int firstCost) {
         this.game = game;
+        this.gameId = game.getId();
         this.name = name;
         this.firstCost = firstCost;
         this.owner = null;
