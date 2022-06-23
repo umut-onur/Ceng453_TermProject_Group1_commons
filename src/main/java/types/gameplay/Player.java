@@ -230,12 +230,13 @@ public class Player implements GameEntity {
     @JsonIgnore
     public void sendToJail() throws TileOfTypeNotFoundException {
         this.position = this.game.findFirstTileOfType(TileType.JUST_VISITING);
+        this.doubleRollStreak = 0;
         this.turnsInJailLeft = 2;
     }
 
     @JsonIgnore
     public boolean willRepeatTurn() {
-        return this.mostRecentDice.isDoubleDice();
+        return this.mostRecentDice.isDoubleDice() && this.turnsInJailLeft <= 0;
     }
 
     @JsonIgnore
@@ -319,8 +320,8 @@ public class Player implements GameEntity {
             throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
         this.tradeWithPlayer(this.game.getCurrentOffer().getReceiver(), this.game.getCurrentOffer().getBuyablesIn(), this.game.getCurrentOffer().getBuyablesOut(), this.game.getCurrentOffer().getNetBid());
-        this.game.setCurrentOffer(null);
         this.game.setCurrentPlayer(this.game.getCurrentOffer().getSender());
+        this.game.setCurrentOffer(null);
         this.game.setPhase(GamePhase.trade);
     }
 
@@ -329,8 +330,8 @@ public class Player implements GameEntity {
         if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().isOfSameUser(this)) {
             throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
-        this.game.setCurrentOffer(null);
         this.game.setCurrentPlayer(this.game.getCurrentOffer().getSender());
+        this.game.setCurrentOffer(null);
         this.game.setPhase(GamePhase.trade);
     }
 
