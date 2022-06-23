@@ -4,31 +4,19 @@ import com.fasterxml.jackson.annotation.*;
 
 import java.util.Random;
 
-public class Dice implements GameEntity {
-    private Game game;
-    private String gameId;
+public class Dice{
     private int dieOne;
     private int dieTwo;
 
     @JsonCreator
-    public Dice(@JsonProperty("game") Game game, @JsonProperty("dieOne") Integer dieOne, @JsonProperty("dieTwo") Integer dieTwo) {
-        this.game = game;
-        this.gameId = game.getId();
+    public Dice(@JsonProperty("dieOne") Integer dieOne, @JsonProperty("dieTwo") Integer dieTwo) {
         this.dieOne = dieOne;
         this.dieTwo = dieTwo;
     }
 
     public Dice(Game game, String gameId) {
-        this.game = game;
-        this.gameId = gameId;
         this.dieOne = 0;
         this.dieTwo = 0;
-    }
-
-    @JsonGetter
-    @Override
-    public String getGameId() {
-        return this.gameId;
     }
 
     @JsonIgnore
