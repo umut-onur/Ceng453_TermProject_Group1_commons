@@ -344,15 +344,9 @@ public class Player implements GameEntity {
         // Check if each player owns the supposed buyables, and carry the buyables to middle lists that will be added to
         // each other's buyables in the end.
         for (Buyable b : outgoingBuyables) {
-            if (!b.getOwner().isOfSameUser(this)) {
-                throw new TileNotSellableException(b);
-            }
             buyablesFromThisToOther.add(b);
         }
         for (Buyable b : incomingBuyables) {
-            if (!b.getOwner().isOfSameUser(otherPlayer)) {
-                throw new TileNotBuyableException(b);
-            }
             buyablesFromOtherToThis.add(b);
         }
     
