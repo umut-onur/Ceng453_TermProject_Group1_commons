@@ -1,5 +1,6 @@
 package types.gameplay;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import types.gameplay.exceptions.TileNotBuyableException;
@@ -20,7 +21,7 @@ public class GoToJail implements Tile {
         this.position = 4;
     }
     
-    @JsonIgnore
+    @JsonGetter
     @Override
     public String getGameId() {
         return this.game != null ? game.getId() : null;

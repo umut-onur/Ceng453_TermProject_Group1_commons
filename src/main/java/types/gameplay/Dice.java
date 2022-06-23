@@ -20,7 +20,7 @@ public class Dice implements GameEntity {
         this(game, 0, 0);
     }
 
-    @JsonIgnore
+    @JsonGetter
     @Override
     public String getGameId() {
         return this.game.getId();

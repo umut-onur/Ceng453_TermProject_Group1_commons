@@ -76,7 +76,7 @@ public class Player implements GameEntity {
         this.mostRecentDice = this.game.getDice();
     }
 
-    @JsonIgnore
+    @JsonGetter
     @Override
     public String getGameId() {
         return this.game != null ? game.getId() : null;
@@ -124,8 +124,8 @@ public class Player implements GameEntity {
         }
         return this.game.getBoard().get(this.getPosition()).canBeBought();
     }
-
-    @JsonIgnore
+    
+    @JsonGetter
     public List<Buyable> buyables() {
         if (this.game == null) {
             return new ArrayList<>();

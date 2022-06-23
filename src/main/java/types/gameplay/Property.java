@@ -1,5 +1,6 @@
 package types.gameplay;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import types.gameplay.exceptions.NotEnoughMoneyToBuyException;
@@ -34,7 +35,7 @@ public class Property implements Buyable {
         this.position = -99;
     }
     
-    @JsonIgnore
+    @JsonGetter
     @Override
     public String getGameId() {
         return this.game != null ? game.getId() : null;
