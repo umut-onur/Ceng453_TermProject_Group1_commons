@@ -160,7 +160,7 @@ public class Player implements GameEntity {
 
     @JsonIgnore
     public boolean ownsBuyable(Buyable buyable) {
-        return buyable.getOwner() != null && this.is(buyable.getOwner());
+        return buyable.getOwner() != null && this.isOfSameUser(buyable.getOwner());
     }
 
     @JsonIgnore
@@ -315,7 +315,7 @@ public class Player implements GameEntity {
 
     @JsonIgnore
     public void acceptTradeOffer() throws TileNotSellableException, TileNotBuyableException, InvalidTradeOfferException {
-        if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().is(this)) {
+        if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().isOfSameUser(this)) {
             throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
         this.tradeWithPlayer(this.game.getCurrentOffer().getReceiver(), this.game.getCurrentOffer().getBuyablesIn(), this.game.getCurrentOffer().getBuyablesOut(), this.game.getCurrentOffer().getNetBid());
@@ -326,7 +326,7 @@ public class Player implements GameEntity {
 
     @JsonIgnore
     public void rejectTradeOffer() throws InvalidTradeOfferException {
-        if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().is(this)) {
+        if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().isOfSameUser(this)) {
             throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
         this.game.setCurrentOffer(null);

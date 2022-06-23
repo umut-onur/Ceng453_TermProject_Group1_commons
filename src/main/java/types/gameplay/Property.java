@@ -123,6 +123,6 @@ public class Property implements Buyable {
     @JsonIgnore
     @Override
     public String toString() {
-        return "'" + this.name + "' (" + this.firstCost + "$)";
+        return "'" + this.name + "' (" + this.firstCost + "$," + this.owner.getName() + ")";
     }
 }
