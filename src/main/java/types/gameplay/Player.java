@@ -319,7 +319,7 @@ public class Player implements GameEntity {
         if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().isOfSameUser(this)) {
             throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
-        this.game.getCurrentOffer().getReceiver().tradeWithPlayer(this, this.game.getCurrentOffer().getBuyablesIn(), this.game.getCurrentOffer().getBuyablesOut(), this.game.getCurrentOffer().getNetBid());
+        this.game.getCurrentOffer().getSender().tradeWithPlayer(this, this.game.getCurrentOffer().getBuyablesIn(), this.game.getCurrentOffer().getBuyablesOut(), this.game.getCurrentOffer().getNetBid());
         this.game.setCurrentPlayer(this.game.getCurrentOffer().getSender());
         this.game.setCurrentOffer(null);
         this.game.setPhase(GamePhase.trade);
@@ -344,11 +344,19 @@ public class Player implements GameEntity {
                 "Outgoing buyables: " + outgoingBuyables.toString() + "\n" +
                 "Net bid: " + netBid + ".\n");
     
+        List<Buyable> buyablesFromOtherToThis = new ArrayList<>();
+        List<Buyable> buyablesFromThisToOther = new ArrayList<>();
+        for (Buyable b : incomingBuyables) {
+            buyablesFromOtherToThis.add((Buyable) this.game.getBoard().get(b.getPosition()));
+        }
         for (Buyable b : outgoingBuyables) {
+            buyablesFromThisToOther.add((Buyable) this.game.getBoard().get(b.getPosition()));
+        }
+        for (Buyable b : buyablesFromOtherToThis) {
             System.out.println("Setting " + b.getName() + "'s owner to " + this.name);
             b.setOwner(this);
         }
-        for (Buyable b : incomingBuyables) {
+        for (Buyable b : buyablesFromThisToOther) {
             System.out.println("Setting " + b.getName() + "'s owner to " + otherPlayer.getName());
             b.setOwner(otherPlayer);
         }
