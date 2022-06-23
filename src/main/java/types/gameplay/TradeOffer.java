@@ -95,6 +95,7 @@ public class TradeOffer implements GameEntity{
     
     @JsonIgnore
     public boolean isValid() {
+        System.out.println("TradeOffer.isValid entered with offer: " + this.toString());
         boolean playersAreTogether = Objects.equals(this.sender.getGameId(), this.receiver.getGameId());
         boolean senderOwnsAllOfferedBuyables = true;
         for (Buyable b : this.buyablesOut) {
@@ -110,6 +111,9 @@ public class TradeOffer implements GameEntity{
                 break;
             }
         }
+        System.out.println("playersAreTogether = " + playersAreTogether + "\n" +
+                "senderOwnsAllOfferedBuyables = " + senderOwnsAllOfferedBuyables + "\n" +
+                "receiverOwnsAllDemandedBuyables = " + receiverOwnsAllDemandedBuyables + "\n");
         return playersAreTogether && senderOwnsAllOfferedBuyables && receiverOwnsAllDemandedBuyables;
     }
     
@@ -129,5 +133,16 @@ public class TradeOffer implements GameEntity{
                     this.netBid == o.netBid;
         }
         return false;
+    }
+    
+    @JsonIgnore
+    @Override
+    public String toString() {
+        return "TRADE OFFER:\n" +
+                "\tSender: " + this.getSender() + "\n" +
+                "\tReceiver: " + this.getReceiver() + "\n" +
+                "\tOut: " + this.getBuyablesOut().toString() + "\n" +
+                "\tIn: " + this.getBuyablesIn().toString() + "\n" +
+                "\tBid: " + this.getNetBid() + "\n";
     }
 }
