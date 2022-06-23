@@ -319,6 +319,7 @@ public class Player implements GameEntity {
         if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().isOfSameUser(this)) {
             throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
+        this.game.getCurrentOffer().getSender().setGame(this.game);
         this.game.getCurrentOffer().getSender().tradeWithPlayer(this, this.game.getCurrentOffer().getBuyablesIn(), this.game.getCurrentOffer().getBuyablesOut(), this.game.getCurrentOffer().getNetBid());
         this.game.setCurrentPlayer(this.game.getCurrentOffer().getSender());
         this.game.setCurrentOffer(null);
