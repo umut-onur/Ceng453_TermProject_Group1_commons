@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
 import types.auth.User;
 import types.gameplay.exceptions.*;
-import types.websocket.TradeOfferMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,8 +124,8 @@ public class Player implements GameEntity {
         return this.game.getBoard().get(this.getPosition()).canBeBought();
     }
     
-    @JsonGetter
-    public List<Buyable> buyables() {
+    @JsonIgnore
+    private List<Buyable> getBuyables() {
         if (this.game == null) {
             return new ArrayList<>();
         }
@@ -145,7 +144,7 @@ public class Player implements GameEntity {
     @JsonIgnore
     public int numberOfPublicTransportsOwned() {
         int numberOfPublicTransportsOwned = 0;
-        for (Buyable b : this.buyables()) {
+        for (Buyable b : this.getBuyables()) {
             if (b.getType().equals(TileType.PUBLIC_TRANSPORT)) {
                 numberOfPublicTransportsOwned++;
             }
@@ -161,7 +160,7 @@ public class Player implements GameEntity {
     @JsonIgnore
     public int getScore() {
         int score = this.balance;
-        for (Buyable b : this.buyables()) {
+        for (Buyable b : this.getBuyables()) {
             score += b.getFirstCost();
         }
         return score;
@@ -380,7 +379,7 @@ public class Player implements GameEntity {
     
     @JsonIgnore
     public void sellAll() throws TileNotSellableException {
-        for (Buyable b : this.buyables()) {
+        for (Buyable b : this.getBuyables()) {
             b.handlePlayerSell(this);
         }
     }
@@ -424,9 +423,10 @@ public class Player implements GameEntity {
         return false;
     }
 
+    @JsonIgnore
     public String toString() {
         return String.format("Player: gameId=%s, userId=%s, name=%s, position=%d, balance=%d, doubleRollStreak=%d, turnsInJailLeft=%d, publicTransportsOwned=%d, buyables=%s",
                 this.getGameId(), this.userId, this.name, this.position, this.balance, this.doubleRollStreak,
-                this.turnsInJailLeft, this.numberOfPublicTransportsOwned(), this.buyables());
+                this.turnsInJailLeft, this.numberOfPublicTransportsOwned(), this.getBuyables());
     }
 }
