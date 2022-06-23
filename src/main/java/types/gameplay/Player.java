@@ -338,25 +338,21 @@ public class Player implements GameEntity {
     @JsonIgnore
     public void tradeWithPlayer(Player otherPlayer, List<Buyable> incomingBuyables, List<Buyable> outgoingBuyables, int netBid)
             throws TileNotSellableException, TileNotBuyableException {
-        List<Buyable> buyablesFromThisToOther = new ArrayList<>();
-        List<Buyable> buyablesFromOtherToThis = new ArrayList<>();
-        
-        // Check if each player owns the supposed buyables, and carry the buyables to middle lists that will be added to
-        // each other's buyables in the end.
-        for (Buyable b : outgoingBuyables) {
-            buyablesFromThisToOther.add(b);
-        }
-        for (Buyable b : incomingBuyables) {
-            buyablesFromOtherToThis.add(b);
-        }
+        System.out.println(this.name + ".tradeWithPlayer entered with\n" +
+                "Other player: " + otherPlayer.getName() + "\n" +
+                "Incoming buyables: " + incomingBuyables.toString() + "\n" +
+                "Outgoing buyables: " + outgoingBuyables.toString() + "\n" +
+                "Net bid: " + netBid + ".\n");
     
-        // All buyables are properly owned by supposed players, committing the changes.
-        for (Buyable b : buyablesFromOtherToThis) {
+        for (Buyable b : outgoingBuyables) {
+            System.out.println("Setting " + b.getName() + "'s owner to " + this.name);
             b.setOwner(this);
         }
-        for (Buyable b : buyablesFromThisToOther) {
+        for (Buyable b : incomingBuyables) {
+            System.out.println("Setting " + b.getName() + "'s owner to " + otherPlayer.getName());
             b.setOwner(otherPlayer);
         }
+        System.out.println(this.name + " pays " + netBid + " dollars to " + otherPlayer);
         this.pay(netBid, otherPlayer);
     }
 
