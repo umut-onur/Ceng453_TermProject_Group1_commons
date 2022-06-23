@@ -319,7 +319,7 @@ public class Player implements GameEntity {
         if (!this.game.getCurrentOffer().isValid() || !this.game.getCurrentOffer().getReceiver().isOfSameUser(this)) {
             throw new InvalidTradeOfferException(this.game.getCurrentOffer());
         }
-        this.tradeWithPlayer(this.game.getCurrentOffer().getReceiver(), this.game.getCurrentOffer().getBuyablesIn(), this.game.getCurrentOffer().getBuyablesOut(), this.game.getCurrentOffer().getNetBid());
+        this.game.getCurrentOffer().getReceiver().tradeWithPlayer(this, this.game.getCurrentOffer().getBuyablesIn(), this.game.getCurrentOffer().getBuyablesOut(), this.game.getCurrentOffer().getNetBid());
         this.game.setCurrentPlayer(this.game.getCurrentOffer().getSender());
         this.game.setCurrentOffer(null);
         this.game.setPhase(GamePhase.trade);
@@ -344,13 +344,13 @@ public class Player implements GameEntity {
         // Check if each player owns the supposed buyables, and carry the buyables to middle lists that will be added to
         // each other's buyables in the end.
         for (Buyable b : outgoingBuyables) {
-            if (!b.getOwner().is(this)) {
+            if (!b.getOwner().isOfSameUser(this)) {
                 throw new TileNotSellableException(b);
             }
             buyablesFromThisToOther.add(b);
         }
         for (Buyable b : incomingBuyables) {
-            if (!b.getOwner().is(otherPlayer)) {
+            if (!b.getOwner().isOfSameUser(otherPlayer)) {
                 throw new TileNotBuyableException(b);
             }
             buyablesFromOtherToThis.add(b);
